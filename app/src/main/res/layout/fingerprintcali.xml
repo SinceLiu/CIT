@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+   <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal" 
+    android:layout_marginTop="200dp">
+
+    <TextView
+        android:id="@+id/fp_hint"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"  
+        android:text="@string/fp_test_hint"
+        android:textSize="30sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/finger_image_layout"
+        android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="300dp"
+    android:gravity="center_horizontal" >
+    </LinearLayout>
+
+   <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="500dp">
+    <Button
+        android:id="@+id/btn_fpcali"
+        android:layout_gravity="center"
+
+        android:layout_width="100dip"
+        android:text="@string/fp_cali"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btn_fpstart"
+        android:layout_gravity="center"
+
+        android:layout_width="100dip"
+        android:layout_height="wrap_content" 
+        android:text="@string/fp_start" />
+
+    <Button
+        android:id="@+id/btn_fpstop"
+        android:layout_gravity="center"
+
+        android:layout_width="100dip"
+        android:layout_height="wrap_content" 
+        android:text="@string/fp_stop" />
+    </LinearLayout>
+
+    <include
+        layout="@layout/pass_fail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
+</FrameLayout>

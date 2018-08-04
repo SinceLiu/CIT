@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/test_wifi_rx"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="@string/wlan_data_rate" />
+
+        <EditText
+            android:id="@+id/et_wlan_rx_data_rate"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wlan_channel" />
+
+        <EditText
+            android:id="@+id/et_wlan_rx_channel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="@string/wlan_equ_type" />
+
+        <EditText
+            android:id="@+id/et_wlan_rx_equtype"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="@string/wlan_TotalPacket"/>
+
+        <EditText
+            android:id="@+id/et_wlan_rx_totalPacket"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp" />
+
+    </LinearLayout>
+    <!--
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:layout_width="100dp" android:layout_height="wrap_content"
+            android:text="@string/wlan_rx_listening_times" />
+
+        <EditText android:id="@+id/et_wlan_tx_listening_times"
+            android:layout_marginLeft="30dp" android:layout_width="150dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <TextView android:layout_width="100dp" android:layout_height="wrap_content"
+            android:text="@string/wlan_rx_address" />
+
+        <EditText android:id="@+id/et_wlan_rx_address"
+            android:layout_marginLeft="30dp" android:layout_width="180dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+     -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_wl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btn_wl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="@string/wlan_wl" />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_wlan_rx_get_info"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp" />
+
+    <Button
+        android:id="@+id/btn_wlan_rx_start"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="@string/wlan_tx_start">
+    </Button>
+
+    <Button
+        android:id="@+id/btn_wlan_rx_clear"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="@string/wlan_tx_clear">
+    </Button>
+
+    <Button
+        android:id="@+id/btn_wlan_rx_stop"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="@string/wlan_tx_close">
+    </Button>
+
+</LinearLayout>
+
+

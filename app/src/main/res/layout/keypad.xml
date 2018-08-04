@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+	
+	<TextView android:id="@+id/txt_one" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_two" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="60dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_three" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="120dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_four" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="180dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_five" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="240dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_six" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="300dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_seven" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="360dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_eight" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="420dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_nine" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="480dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+
+	<TextView android:id="@+id/txt_ten" 
+		android:layout_width="fill_parent"
+		android:layout_height="50dip"
+		android:layout_gravity="top"
+		android:layout_marginTop="540dip"
+		android:gravity="center"
+		android:textSize="30sp"
+		android:background="@color/gray" />
+	<include
+		layout="@layout/pass_fail"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"/>
+</FrameLayout>

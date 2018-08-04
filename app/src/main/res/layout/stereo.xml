@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--
+        Copyright (c) 2011, QUALCOMM Incorporated.
+        All Rights Reserved.
+        QUALCOMM Proprietary and Confidential.
+        Developed by QRD Engineering team.
+    -->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+  <!--  <TextView
+        android:id="@+id/headset_hint"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+  	    android:gravity="center"
+  	    android:layout_marginBottom="50dip"
+        android:text="@string/speaker_recording"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        />-->
+    <Button
+        android:id="@+id/leftChannel"
+        android:text="@string/stereo_left"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+  	    android:gravity="center"
+		android:textSize="30sp"
+        android:textAppearance="?android:attr/textAppearanceLarge">
+    </Button>
+
+    <Button
+        android:id="@+id/rightChannel"
+        android:text="@string/stereo_right"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+  	    android:gravity="center"
+		android:textSize="30sp"
+  	    android:layout_marginTop="65dip"
+        android:textAppearance="?android:attr/textAppearanceLarge">
+    </Button>
+    <include
+		layout="@layout/pass_fail"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"/>
+
+</FrameLayout>

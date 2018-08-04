@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+  Copyright (c) 2011 QUALCOMM Incorporated.
+  All Rights Reserved.
+  QUALCOMM Proprietary and Confidential.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <TextView
+	android:id="@+id/cur_rev"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="@string/current_version" />
+        
+    <Button
+        android:id="@+id/start_upgrade_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start_upgrade_version"
+        android:textSize="30sp"
+        android:layout_gravity="center_horizontal"
+        />
+
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <!--<view 
+        class="com.sim.cit.testitem.Panel"
+        android:id="@+id/tsv_touch_paneledge"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>-->
+    <TextView
+        android:id="@+id/txt_touch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:text="@string/touch_illustration2"/>
+
+    <include
+        layout="@layout/pass_fail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
+</FrameLayout>

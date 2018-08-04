@@ -1,0 +1,23 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:orientation="vertical"
+    tools:context="com.sim.cit.testitem.CameraActivity">
+
+    <LinearLayout android:id="@+id/fullscreen_content_controls"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="vertical" android:layout_weight="5"
+        >
+        <SurfaceView
+            android:id="@+id/surfaceView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+    <include
+        layout="@layout/pass_fail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="bottom" android:layout_weight="1"/>
+
+
+</LinearLayout>

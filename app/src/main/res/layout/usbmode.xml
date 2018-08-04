@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- from the "T8G" transplant calculator input e^010101^e function by wangkai 20141110 -->
+<!-- add for calculator input "e^010101^e" start port switch by songguangyu 20140426 start -->
+
+<FrameLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center">
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="@string/usbmodestr"/>
+    <!--TextView
+        android:id="@+id/tv_curState"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"/-->
+    <RadioGroup
+        android:id="@+id/radioGroup2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/but_portOn"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="@string/portOn"/>
+        <RadioButton
+            android:id="@+id/but_portOff"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="@string/portOff"/>
+    </RadioGroup>
+</LinearLayout>
+</FrameLayout>
+<!-- add for calculator input "e^010101^e" start port switch by songguangyu 20140426 end -->

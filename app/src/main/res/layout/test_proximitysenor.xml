@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/test_proximitysenor"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/white1"
+    android:orientation="vertical">
+    <!--
+    <Button
+    android:id="@+id/btn_swtich_proximitysensor"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/g_null_text"
+    android:clickable="true"
+    >
+    </Button>
+     -->
+    <TextView
+        android:id="@+id/tv_proximitysenor_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_swtich_proximitysensor"
+        android:text="@string/g_null_text"
+        android:textSize="30sp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tv_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_proximitysenor_info"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/test_proximitysensor_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/test_gray"
+        android:visibility="invisible">
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/test_proximitysensor_green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/test_green"
+        android:visibility="invisible">
+    </ImageView>
+
+    <include
+        layout="@layout/pass_fail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom" />
+</RelativeLayout>
+
+

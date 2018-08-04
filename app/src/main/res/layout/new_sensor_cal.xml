@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_gravity="top|left"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/new_sensorinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp">
+        </TextView>
+        <TextView
+            android:id="@+id/new_ps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="@string/new_ps">
+        </TextView>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/new_sensor_cal_btn"
+		android:layout_width="200dip"
+		android:layout_height="100dip"
+		android:layout_gravity="center"
+        android:textSize="30sp"
+        android:text="@string/str_calibration">
+    </Button>
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/my_sensor_tips"
+            android:layout_width="wrap_content"
+    		android:layout_height="50dip"
+            android:text="@string/my_sensor_tips"
+            android:textSize="30sp">
+        </TextView>
+
+        <include 
+            layout="@layout/pass_fail" 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" 
+        />
+
+    </LinearLayout>
+
+</FrameLayout>

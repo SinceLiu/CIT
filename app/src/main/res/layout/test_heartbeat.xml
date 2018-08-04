@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/test_heartbeat"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_gravity="center"
+    android:background="@drawable/white1"
+    android:orientation="vertical">
+    <!--
+    <Button
+    android:id="@+id/btn_swtich_proximitysensor"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/g_null_text"
+    android:clickable="true"
+    >
+    </Button>
+     -->
+    <TextView
+        android:id="@+id/tv_hb_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_swtich_proximitysensor"
+        android:text="@string/g_null_text"
+        android:textSize="30sp"/>
+
+    <TextView
+        android:id="@+id/tv_hb_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hb_info"
+        android:textSize="26dip" />
+
+    <ImageView
+        android:id="@+id/test_hb_gray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/test_gray"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/test_hb_green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/test_green"
+        android:visibility="invisible"/>
+
+    <include
+        layout="@layout/pass_fail"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom" />
+</RelativeLayout>
+
+
