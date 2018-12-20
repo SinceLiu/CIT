@@ -10,14 +10,48 @@
         android:layout_gravity="center"
         android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/tv_bluetooth_info"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_marginTop="20dp"
-        android:text="@string/bluetooth_setingpage"
-        android:textSize="30sp" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_bluetooth_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bluetooth_setingpage"
+            android:textSize="30sp"
+            />
+
+        <TextView
+            android:id="@+id/tv_bluetooth_scanning"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:visibility="invisible"
+            android:text="@string/bluetooth_scanning"
+            android:textSize="30sp"/>
+
+
+        <TextView
+            android:id="@+id/tv_bluetooth_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/tv_bluetooth_finished"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:visibility="invisible"
+            android:text="@string/bluetooth_finished"
+            android:textSize="30sp"
+            />
+    </LinearLayout>
+
+
 
     <include
         layout="@layout/pass_fail"

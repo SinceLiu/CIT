@@ -64,15 +64,6 @@ public class GpsforPCBA extends TestActivity {
     public void onCreate(Bundle savedInstanceState) {
         layoutId = R.layout.gpsforpcba;
         super.onCreate(savedInstanceState);
-        try {
-            oldBrightValue = Settings.System.getInt(GpsforPCBA.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
-        } catch (SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        //Modify for fix the problem of wake up when testing by songguangyu 20140220 start
-        //Settings.System.putInt(Gps.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, -1);
-        Settings.System.putInt(GpsforPCBA.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, Integer.MAX_VALUE - 1);
-        //Modify for fix the problem of wake up when testing by songguangyu 20140220 end
         strGpsFilePaht="/data/GpsData.txt";
         initAllControl();
         //if(isSDcardexist()){
@@ -402,6 +393,5 @@ public class GpsforPCBA extends TestActivity {
             closeGPS();
         }
         //CommonDrive.copyFile("/data/GpsData.txt", Environment.getExternalStorageDirectory()+"/GpsData.txt");
-        Settings.System.putInt(GpsforPCBA.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, oldBrightValue);
     }
 }

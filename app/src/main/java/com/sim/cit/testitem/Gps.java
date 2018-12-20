@@ -64,14 +64,7 @@ public class Gps extends TestActivity {
     public void onCreate(Bundle savedInstanceState) {
         layoutId = R.layout.gps;
         super.onCreate(savedInstanceState);
-        try {
-            oldBrightValue = Settings.System.getInt(Gps.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
-        } catch (SettingNotFoundException e) {
-            e.printStackTrace();
-        }
         //Modify for fix the problem of wake up when testing by songguangyu 20140220 start
-        //Settings.System.putInt(Gps.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, -1);
-        Settings.System.putInt(Gps.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, Integer.MAX_VALUE - 1);
         //Modify for fix the problem of wake up when testing by songguangyu 20140220 end
         strGpsFilePaht="/data/GpsData.txt";
         initAllControl();
@@ -407,7 +400,6 @@ public class Gps extends TestActivity {
             closeGPS();
         }
         //CommonDrive.copyFile("/data/GpsData.txt", Environment.getExternalStorageDirectory()+"/GpsData.txt");
-        Settings.System.putInt(Gps.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, oldBrightValue);
         super.onDestroy();
     }
 }

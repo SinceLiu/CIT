@@ -66,8 +66,8 @@ public class GyroseopCalibration extends TestActivity {
                     Log.i("xsp", "GyroCalibration yyyyy = " + y);
                     Log.i("xsp", "GyroCalibration zzzzz = " + z);
 //                    mNv.set_gyro_sensor(x, y, z);
-//                    int [] values = mNv.get_gyro_sensor();
-					int [] values = new int[3];
+                    int [] values = new int[3];
+//                    = mNv.get_gyro_sensor();
                     Log.i("xsp", "GyroCalibration xxxxx = " + values[0]);
                     Log.i("xsp", "GyroCalibration yyyyy = " + values[1]);
                     Log.i("xsp", "GyroCalibration zzzzz = " + values[2]);

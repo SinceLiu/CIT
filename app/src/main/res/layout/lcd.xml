@@ -15,7 +15,7 @@
 		android:text="@string/lcd_illustration"
 		android:gravity="center"
 		android:textSize="30sp"/>
-	
+
 	<include
 		layout="@layout/pass_fail"
 		android:layout_width="fill_parent"

@@ -17,6 +17,7 @@
     <string name="test_info_1">Above</string>
     <string name="test_info_2">of all tests pass.</string>
     <string name="clear_data">清除数据</string>
+    <string name="notice">清除数据后，请等待机器重启，在此之间请不要做任何操作。重启后，请确认进入开机向导！</string>
     <!-- exit-->     
     <string name="alert_dialog_ok">OK</string>
     <string name="alert_dialog_cancel">Cancel</string>
@@ -29,8 +30,10 @@
     <string name="sim_status_3"> Locked: requires the users SIM/UIM PUK to unlock</string>
     <string name="sim_status_4"> Locked: requires a network PIN to unlock</string>
     <string name="sim_status_5"> Ready</string>
+    <string name="sim_status_6">SIM1 and SIM2 are ready</string>
     <string name="sd_card_space">"SD card content"</string>
     <string name="sd_card_space1">"SD card space available"</string>
+    <string name="colligate_illustration">Adjust the volume by keypad</string>
     <!-- wlan for cta test -->
     <string name="wlan_data_rate">Data Rate</string>
     <string name="wlan_channel">Channel</string>
@@ -55,6 +58,7 @@
     <string name="backlight_illustration">"Press the Power key to test cell phone sleep/wake after screen turn dark! "</string>
     <!-- camera -->
     <string name="camera_illustration">"Select the result of Camera test，please！"</string>
+    <string name="camera_retake">"retake"</string>
     <!-- CameraBack -->
     <string name="cameraback_name">CameraBack</string>
     <string name="cameraback_takepicture">Take picture</string>
@@ -196,6 +200,9 @@
     <string name="wifi_state_unknown">WiFi state unknown, please retry.</string>
     <!-- BlueTooth -->
     <string name="bluetooth_setingpage">"Select the result of BlueTooth test,please!"</string>
+    <string name="bluetooth_mac_address">"MAC address"</string>
+    <string name="bluetooth_scanning">Scanning</string>
+    <string name="bluetooth_finished">finished</string>
     <string name="bluetooth_name">Bluetooth</string>
     <string name="bluetooth_scan_start">Scaning devices...</string>
     <string name="bluetooth_scan_finish">Finish scan</string>
@@ -216,6 +223,10 @@
     <string name="bt_ft_result">"BT/FT test info"</string>
     <string name="tp_type">"TP manufacturer info"</string>
     <string name="lcd_type">"LCD manufacturer info"</string>
+    <string name="battery_vendor">Battery manufacturer info</string>
+    <string name="motion_sensor_vendor">motion sensor manufacturer info</string>
+    <string name="proximity_sensor_vendor">proximity sensor manufacturer info</string>
+    <string name="light_sensor_vendor">light sensor manufacturer info</string>
     <!--Modify for add front camera information by lizhaobo 20151120 start-->
     <string name="camera_type">"Back Camera manufacturer info"</string>
     <string name="rom_type">"ROM manufacturer info"</string>
@@ -394,6 +405,12 @@
     <string name="fp_touch_key">请用手指轻按指纹按键</string>
     <string name="insertSD">请先插入SD卡和U盘，再测试</string>
     <string name="fp_identify_suc">指纹识别成功，请选择结果</string>
-	
+    
+    <string name="jishen">机身</string>
+    <string name="dizuo">底座</string>
+    <string name="nodizuo">无底座检测</string>
+    <string name="btn_start">开始测试</string>
+    <string name="btn_starting">测试中</string>
+    <string name="test_notice">点击开始测试按钮后，测试过程中，请保持屏幕亮屏，并且不要触摸到屏幕</string>
     
 </resources>

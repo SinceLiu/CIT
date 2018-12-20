@@ -39,19 +39,21 @@ import com.sim.cit.testitem.WlanService;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Environment;
+
+import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
@@ -59,7 +61,6 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import java.util.HashMap;
-import java.util.List;
 //add for mark version test results by songguangyu 20140220 end
 //Modify for add readconfig in CIT by xiasiping 20140819 start
 import android.content.ComponentName;
@@ -69,19 +70,19 @@ import android.widget.Toast;
 import android.util.Log;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
-import android.provider.Settings;
-import android.provider.Settings.SettingNotFoundException;
 
 public class MainList extends ListActivity {
     private static final String LOG_TAG = "CIT_MainList";
     private static final int PCB = 0;
     //        private static final int SUBPCB = PCB + 1;
-    private static final int SUBPCB = PCB;
+//    private static final int PCBAS = PCB + 1;
+//    private static final int WBG = PCBAS + 1;
+//    private static final int SUBPCB = WBG;
     //private static final int COMPLETE = SUBPCB + 1;
 //        private static final int COMPLETE = SUBPCB + 1;
     //private static final int ALL_ITEM = COMPLETE + 1;
     //private static final int VERSION = ALL_ITEM + 1;
-    private static final int VERSION = SUBPCB + 1;
+    private static final int VERSION = PCB + 1;
     //private static final int TDTEST = READ_CONFIG + 1;
     //private static final int AGING_TEST = TDTEST + 1;
     private static final int AGING_TEST = VERSION + 1;
@@ -90,6 +91,7 @@ public class MainList extends ListActivity {
     //Modify for add readconfig in CIT by xiasiping 20140819 end
     private static final int SPEAKER_PINKNOISE = USBMODE + 1;
     private static final int RECEIVER_PINKNOISE = SPEAKER_PINKNOISE + 1;
+    private static final int CLEAR_DATA = RECEIVER_PINKNOISE;
     private static final int CHECK_P_SENSOR = RECEIVER_PINKNOISE + 1;
     private static final int READ_CONFIG = CHECK_P_SENSOR + 1;
     private GridView gridView;
@@ -106,8 +108,6 @@ public class MainList extends ListActivity {
     //add for mark version test results by songguangyu 20140220 end
     private boolean mIsCharging = false;
 
-    private int oldBrightValue;
-
     private byte up_times = 0;
     private byte down_times = 0;
 
@@ -119,9 +119,11 @@ public class MainList extends ListActivity {
     private Boolean isStartedBySdCard;
     private List<TestItem> list = new ArrayList<TestItem>();
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("MainList", "onCreate()");
 
         enableHomeKey(true);
 //        try{
@@ -131,17 +133,40 @@ public class MainList extends ListActivity {
 //        	Log.i("adsd","create fail:"+ e.toString());
 //        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //屏幕常亮,不修改系统休眠时间
+
         application = (CITTestHelper) getApplication();
+        Log.e(LOG_TAG, "application: " + application);
+        application.setCitRunning(true);
+        if (getIntent().getBooleanExtra("isStartedBySdCard", false)) {
+            application.setStartedBySdCard(true);
+        }
         isStartedBySdCard = application.isStartedBySdCard();
+        if (isStartedBySdCard) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        }
+        setContentView(R.layout.activity_main);
+        //记录wifi和蓝牙的状态，用于退出CIT时恢复
+        WifiManager wm = (WifiManager) application.getSystemService(Context.WIFI_SERVICE);
+        if (wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED)
+            application.setWifiOpened(true);
+        else
+            application.setWifiOpened(false);
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter.getState() == BluetoothAdapter.STATE_ON)
+            application.setBlueToothOpened(true);
+        else
+            application.setBlueToothOpened(false);
+        bluetoothAdapter = null;
+
         //add for test wlan and blueTooth when app starts by lxx 20180727 start
         Intent startWlanService = new Intent(MainList.this, WlanService.class);
         startService(startWlanService);
         Intent startBlueToothService = new Intent(MainList.this, BlueToothService.class);
         startService(startBlueToothService);
         //add for test wlan and blueTooth when app starts by lxx 20180727 end
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         context = getApplicationContext();
         //20121205 modified for change the view by lvhongshan start
@@ -149,6 +174,9 @@ public class MainList extends ListActivity {
         mainList = new ArrayList<String>();
         //modify for mark version test results by songguangyu 20140220 end
         mainList.add(getString(R.string.title_pcba_auto));
+//        mainList.add(getString(R.string.title_pcba_sensorAuto));
+//        mainList.add(getString(R.string.title_WBGauto));
+
         //modify for take out SUBPCB test when version is IS by songguangyu 20140211 start
         /*if(CommonDrive.getHWSubType().replace('\n',' ').contains("IS")){
             isISVersion = true;
@@ -174,8 +202,8 @@ public class MainList extends ListActivity {
         mainList.add("Run-In-Test");
         mainList.add("USB-MODE");
         mainList.add("Speaker Pinknoise Test");
-        mainList.add("Receiver Pinknoise Test");
-
+        // mainList.add("Receiver Pinknoise Test");
+        mainList.add(getString(R.string.clear_data));
         if (isStartedBySdCard) {
             application.removeSdCardTest();
         }
@@ -185,18 +213,12 @@ public class MainList extends ListActivity {
         List<String> classNameList = new ArrayList<String>();
         titleList = application.getTitleList();
         classNameList = application.getClassNameList();
-        Log.i("MainList","size ："+application.getTitleList().size() + "       "+application.getTitleList().toString());
+        Log.i("MainList", "size ：" + application.getTitleList().size() + "       " + application.getTitleList().toString());
         if (titleList != null) {
             for (int index = 0; index < titleList.size(); index++) {
                 list.add(new TestItem(titleList.get(index), classNameList.get(index), 0));
             }
         }
-        try {
-            oldBrightValue = Settings.System.getInt(MainList.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
-        } catch (SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        Settings.System.putInt(MainList.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, Integer.MAX_VALUE - 1);
         //add for show complete test by gridView by lxx 20180726
         gridView = (GridView) findViewById(R.id.complete_list);
         completeAutoTest = (Button) findViewById(R.id.complete_auto_test);
@@ -219,9 +241,11 @@ public class MainList extends ListActivity {
     //add for mark version test results by songguangyu 20140220 start
     @Override
     protected void onResume() {
+        Log.e("MainList", "onResume()");
         if (isStartedBySdCard) {
             application.removeSdCardTest();
         }
+        application.setPCBA(false);  //隐藏无底座测试
         application.setTestMode(CITTestHelper.MAIN_CIT);
         application.initTestList(false);
         initListView();
@@ -235,6 +259,21 @@ public class MainList extends ListActivity {
     protected void onPause() {
         unregisterReceiver(mBatteryChangeReceiver);
         super.onPause();
+        Log.e("MainList", "onPause()");
+        if (isFinishing()) {
+            if (application.isStartedBySdCard()) {
+                application.setStartedBySdCard(false);
+            }
+            application.fillAllList();//get again to recover SdCard test
+            Intent stopWlanService = new Intent(MainList.this, WlanService.class);
+            stopService(stopWlanService);
+            Intent stopBlueToothService = new Intent(MainList.this, BlueToothService.class);
+            stopService(stopBlueToothService);
+            //清除Version、Pinknoise测试的结果,
+            application.setVersionTestResult(0);
+            application.setSpeakerPinknoiseTestResult(0);
+            application.setReceiverPinknoiseTestResult(0);
+        }
     }
 
     private final int NORESULTITEM = 6;
@@ -322,7 +361,7 @@ public class MainList extends ListActivity {
             case PCB:
 //            i = new Intent(context, FirstList.class);
 //            i.putExtra(CITTestHelper.EXTRA_KEY_TEST_TYPE, CITTestHelper.EXTRA_VALUE_TEST_TYPE_PCB);
-
+                application.setPCBA(true);  //显示无底座测试
                 i = new Intent(context, SecondList.class);
                 i.putExtra(CITTestHelper.EXTRA_KEY_TEST_TYPE, CITTestHelper.EXTRA_VALUE_TEST_TYPE_PCB);
                 i.putExtra(CITTestHelper.EXTRA_KEY_TO_TESTLIST, CITTestHelper.EXTRA_VALUE_TO_FIRSTLIST_CIT1);
@@ -354,9 +393,12 @@ public class MainList extends ListActivity {
                 i = new Intent(context, SpeakerPinknoiseTest.class);
                 i.putExtra(CITTestHelper.EXTRA_TEST_TYPE_SPEAKER_PINKNOISE_TEST, CITTestHelper.EXTRA_TEST_TYPE_SPEAKER_PINKNOISE_TEST);
                 break;
-            case RECEIVER_PINKNOISE:
-                i = new Intent(context, ReceiverPinknoiseTest.class);
-                i.putExtra(CITTestHelper.EXTRA_TEST_TYPE_RECEIVER_PINKNOISE_TEST, CITTestHelper.EXTRA_TEST_TYPE_RECEIVER_PINKNOISE_TEST);
+//            case RECEIVER_PINKNOISE:
+//                i = new Intent(context, ReceiverPinknoiseTest.class);
+//                i.putExtra(CITTestHelper.EXTRA_TEST_TYPE_RECEIVER_PINKNOISE_TEST, CITTestHelper.EXTRA_TEST_TYPE_RECEIVER_PINKNOISE_TEST);
+            case CLEAR_DATA:
+                System.out.println("clear data");
+                i = new Intent(context, ClearDataActivity.class);
                 break;
             //case RECEIVER:
             //    i = new Intent(context, Receiver.class);
@@ -383,6 +425,20 @@ public class MainList extends ListActivity {
                     i = new Intent();
                     i.putExtra("AGING_CIT", true);
                     i.setComponent(agingtest);
+                    //跳转老化测试前关闭wifi、蓝牙搜索service
+                    Intent stopWlanService = new Intent(MainList.this, WlanService.class);
+                    stopService(stopWlanService);
+                    Intent stopBlueToothService = new Intent(MainList.this, BlueToothService.class);
+                    stopService(stopBlueToothService);
+                    //打开定位
+                    //判断是否开启位置权限，android 6.0需要开启位置，wifiManager才能正常工作
+                    LocationManager locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                    boolean networkProvider = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+                    boolean gpsProvider = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                    if (!networkProvider && !gpsProvider) {
+                        Settings.Secure.putInt(getContentResolver(), Settings.Secure.LOCATION_MODE, 1);  //开启位置
+                    }
+
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.please_input_charger, 2000).show();
                     i = null;
@@ -431,6 +487,8 @@ public class MainList extends ListActivity {
                     Intent i = new Intent(context, UsbMode.class);
                     startActivity(i);
                 }
+                break;
+            default:
                 break;
         }
 
@@ -502,18 +560,26 @@ public class MainList extends ListActivity {
     };
 
     @Override
+    public void finish() {
+        super.finish();
+    }
+
+    @Override
     protected void onDestroy() {
-        Settings.System.putInt(MainList.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, oldBrightValue);
         super.onDestroy();
-        Log.i("MainList", "onDestroy()");
-        if(application.isStartedBySdCard()){
+        Log.e("MainList", "onDestroy()");
+        application.setCitRunning(false);
+        if (application.isStartedBySdCard()) {
             application.setStartedBySdCard(false);
         }
         application.fillAllList();//get again to recover SdCard test
+        Log.e("MainList", "stop WlanService");
         Intent stopWlanService = new Intent(MainList.this, WlanService.class);
         stopService(stopWlanService);
+
+        Log.e("MainList", "stop BlueToothService");
         Intent stopBlueToothService = new Intent(MainList.this, BlueToothService.class);
         stopService(stopBlueToothService);
     }
-
 }
+

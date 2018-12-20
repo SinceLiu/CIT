@@ -27,6 +27,8 @@ import android.widget.Toast;
 import java.lang.reflect.Method;
 //Modify for CIT optimization by xiasiping 20140730 end
 
+import com.readboy.util.FlashlightController;
+
 public class FlashLight extends TestActivity {	  
 	        
     public static final boolean HasFlashlightFile = true;
@@ -52,6 +54,9 @@ public class FlashLight extends TestActivity {
     private List<XNode> xNodes;
     private String flashlight_node = null;
     //Modify for CIT optimization by xiasiping 20140730 end
+    
+    private FlashlightController mFlashlightController;
+    
     @Override
     public void finish() {
 
@@ -70,8 +75,9 @@ public class FlashLight extends TestActivity {
                 Log.i(TAG,"cam is null");
             }
         } else {
-
-            FileOutputStream flashlight;
+        	mFlashlightController.setFlashlight(false);
+        	mFlashlightController = null;
+            /*FileOutputStream flashlight;
             try {
 
                 flashlight = new FileOutputStream(FLASHLIGHT_NODE);
@@ -80,7 +86,7 @@ public class FlashLight extends TestActivity {
 
             } catch (Exception e) {
                 loge(e);
-            }
+            }*/
         }
 
         super.onDestroy();
@@ -88,6 +94,12 @@ public class FlashLight extends TestActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	//add by lqn at 2017.01.11
+    	Log.i(TAG, "----------------onCreate");
+    	mFlashlightController = new FlashlightController(this);
+    	Log.i(TAG, "----------------mFlashlightController = "+mFlashlightController);
+    	
+    	
         //Modify for CIT optimization by xiasiping 20140730 start
         try {
             mxml = new MyXmlUtils().getMxml();
@@ -124,7 +136,9 @@ public class FlashLight extends TestActivity {
                 Log.i(TAG,"cam is null");
             }
         } else {
-            //Modify Flashlight from flash_0 to flash_torch by xiasiping 20140516 
+        	mFlashlightController.setFlashlight(true);
+        	btnPass.setEnabled(true);
+            /*//Modify Flashlight from flash_0 to flash_torch by xiasiping 20140516 
             //FileOutputStream flashlight;
             final FileOutputStream flashlight;
             try {
@@ -161,7 +175,7 @@ public class FlashLight extends TestActivity {
                 btnPass.setEnabled(true);
             } catch (Exception e) {
                 loge(e);
-            }
+            }*/
 
         }
     //    showDialog(FlashLight.this);

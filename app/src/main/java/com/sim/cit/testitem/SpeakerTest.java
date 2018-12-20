@@ -15,6 +15,7 @@ import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.text.format.Formatter;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class SpeakerTest extends TestActivity {
     private int oldBrightValue;
     private boolean isTest=true;
     private int nCurrentMusicVolume;
+    private int nMaxMusicVolume;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         layoutId = R.layout.receivertest;
@@ -44,9 +46,9 @@ public class SpeakerTest extends TestActivity {
     private void startSpeaker(){
         Log.i(TAG, "speaker start");
         am = (AudioManager) getSystemService(AUDIO_SERVICE);
-        int nMaxMusicVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        nMaxMusicVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         nCurrentMusicVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        am.setStreamVolume(AudioManager.STREAM_MUSIC, nMaxMusicVolume, 0);
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, nCurrentMusicVolume, 0);
         mp = MediaPlayer.create(getApplicationContext(), R.raw.speaker);
         if (mp != null) {
         mp.setLooping(true);
@@ -63,6 +65,7 @@ public class SpeakerTest extends TestActivity {
             mp.release();
         }
         if (am != null) {
+            nCurrentMusicVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); //获取最新音量（滑动调节？)
             am.setStreamVolume(AudioManager.STREAM_MUSIC, nCurrentMusicVolume, 0);
         }
     }
@@ -70,5 +73,27 @@ public class SpeakerTest extends TestActivity {
     protected void onResume() {
         super.onResume();
         startSpeaker();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        nCurrentMusicVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); //获取最新音量
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                if (nCurrentMusicVolume < nMaxMusicVolume)
+                    nCurrentMusicVolume++;
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, nCurrentMusicVolume,
+                        AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (nCurrentMusicVolume > 0)
+                    nCurrentMusicVolume--;
+                am.setStreamVolume(AudioManager.STREAM_MUSIC, nCurrentMusicVolume,
+                        AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                return true;
+            default:
+                break;
+        }
+        return super.onKeyDown(keyCode,event);
     }
 }

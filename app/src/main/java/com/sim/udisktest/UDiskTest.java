@@ -60,6 +60,7 @@ import java.io.BufferedWriter;
 public class UDiskTest extends Activity {
 	private final static String TAG = "UDiskTest";
 
+	public static final String USB_PATH = "/storage/12B9-40E7";
 
 	private Uri mUri;
 	private long mMediaId = -1;
@@ -71,41 +72,69 @@ public class UDiskTest extends Activity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		Intent intent = getIntent();
-		if (intent == null) {
-			finish();
-			return;
-		}
+//		Intent intent = getIntent();
+		// if (intent == null) {
+		// finish();
+		// return;
+		// }
+		//
+		// mUri = intent.getData();
+		// if (mUri == null) {
+		// finish();
+		// return;
+		// }
 
-		mUri = intent.getData();
-		if (mUri == null) {
-			finish();
-			return;
-		}
-
-		String scheme = mUri.getScheme();
-		Log.v(TAG, " scheme: " + scheme);
+//		String scheme = mUri.getScheme();
+//		Log.v(TAG, " scheme: " + scheme);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		String filename = "/storage/usbotg/test.txt";
-		// setContentView(R.layout.audiopreview);
-		if ("file".equals(scheme)) {
-			filename = mUri.toString();
-			filename = filename.substring("file://".length(), filename.length());
-			Log.v(TAG, " File Name: " + filename);
+
+		String path = DiskManager.getUsbStoragePath(this);
+		if(path == null){
+			Toast.makeText(this, "没有外接U盘", Toast.LENGTH_LONG).show();
+			finish();
+			return;
 		}
-		mfile = new File(filename);
-		if (mfile.exists()) {
-			try {
-				mfile.delete();
-			} catch (Exception e) {
-				finish();
-				e.printStackTrace();
+		ArrayList<String> allPathList = new ArrayList<String>();
+		allPathList.add(path);
+//		ArrayList<String> allPathList = DiskManager.getAllStoragePath(this);
+		int size = allPathList.size();
+		Log.i(TAG, "-----------------------size = "+size);
+
+//		String path = DiskManager.getUsbStoragePath(this);
+//		if (path == null) {
+//			path = USB_PATH;
+//		}
+//		String filename = "/storage/usbotg/test.txt";
+//		filename = path + "/test.txt";
+//		// setContentView(R.layout.audiopreview);
+//		if ("file".equals(scheme)) {
+//			filename = mUri.toString();
+//			filename = filename.substring("file://".length(), filename.length());
+//			Log.v(TAG, " File Name: " + filename);
+//		}
+
+		String pathString;
+		for (int i = 0; i < size; i++) {
+			pathString = allPathList.get(i);
+			pathString = pathString + "/test.txt";
+			mfile = new File(pathString);
+			if (mfile.exists()) {
+				try {
+					mfile.delete();
+				} catch (Exception e) {
+					finish();
+					e.printStackTrace();
+				}
+				addFile();
+				if (!doTest(i == (size - 1))) {
+					break;
+				}
+			} else {
+				addFile();
+				if (!doTest(i == (size - 1))) {
+					break;
+				}
 			}
-			addFile();
-			doTest();
-		} else {
-			addFile();
-			doTest();
 		}
 
 	}
@@ -115,14 +144,17 @@ public class UDiskTest extends Activity {
 		super.onDestroy();
 	}
 
-	public void doTest() {
+	public boolean doTest(boolean end) {
 		strFromFile = openFile(mfile);
 		Log.v(TAG, " strFromFile: " + strFromFile);
 		if (!"".equals(strFromFile)) {
-			Intent data = new Intent();
-			data.putExtra("readfile", strFromFile);
-			setResult(RESULT_OK, data);
-			Log.v(TAG, " onDestroy : " + strFromFile);
+			if (end) {
+				Intent data = new Intent();
+				data.putExtra("readfile", strFromFile);
+				setResult(RESULT_OK, data);
+				Log.v(TAG, " onDestroy : " + strFromFile);
+				finish();
+			}
 		} else {
 			Log.v(TAG, " strFromFile: is null");
 			strFromFile = "read or write fail,please delete the test.txt in udisk and test again";
@@ -130,15 +162,22 @@ public class UDiskTest extends Activity {
 			data.putExtra("readfile", strFromFile);
 			setResult(RESULT_CANCELED, data);
 			Log.v(TAG, " onDestroy : " + strFromFile);
+			finish();
+			return false;
 		}
-		finish();
+		return true;
 	}
 
+	
+	
 	public void addFile() {
 		try {
 			mfile.createNewFile();
 			writeFIle();
 		} catch (IOException ioe) {
+//			System.out.println("addFile IOException");
+//			Toast.makeText(this, mfile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+//			ioe.printStackTrace();
 			finish();
 		}
 

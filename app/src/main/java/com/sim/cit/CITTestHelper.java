@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+
 import android.content.Context;
 
 import android.app.Activity;
@@ -49,12 +50,11 @@ public class CITTestHelper extends Application {
     // Add xp7700 list item by Lvhongshan 20131212
     // add PA568 list item by xiasiping 20140811 start
     private static final int CONFIG_DEFAULT_KK_PATH = R.xml.kk_list_item;
-
     private static boolean isFromCIT = true;
     // add PA568 list item by xiasiping 20140811 end
-    private static final int CONFIG_DEFAULT_XP7700_PATH =R.xml.xp7700_list_item;
-    private static final int CONFIG_DEFAULT_XP7700_IS_PATH =R.xml.xp7700_is_list_item;
-    private static final int CONFIG_DEFAULT_XP6700_IS_PATH =R.xml.xp6700_is_list_item;
+//    private static final int CONFIG_DEFAULT_XP7700_PATH =R.xml.xp7700_list_item;
+//    private static final int CONFIG_DEFAULT_XP7700_IS_PATH =R.xml.xp7700_is_list_item;
+//    private static final int CONFIG_DEFAULT_XP6700_IS_PATH =R.xml.xp6700_is_list_item;
     public static final String EXTRA_KEY_TEST_TYPE = "to_firstlist";
     public static final String EXTRA_KEY_TO_TESTLIST = "to_testlist";
     public static final String EXTRA_KEY_AUTO_TEST_INDEX = "auto_test_index";
@@ -88,12 +88,16 @@ public class CITTestHelper extends Application {
     public static final int COMPLETE_CIT3 = 6;
     public static final int SUBPCB_CIT1 = 7;
     public static final int SUBPCB_CIT2 = 8;
-    
+
     public static final int MAIN_CIT = 11;
 
     private int testMode;
     private static boolean isAutoTest;
     private boolean isStartedBySdCard;
+    private boolean isPCBA;   //判断是否是PCBA测试，不是就隐藏无底座检测
+    private boolean isWifiOpened;   //记录进入CIT前wifi的状态，退出CIT恢复
+    private boolean isBlueToothOpened;  //记录进入CIT前蓝牙的状态，退出CIT恢复
+    private boolean isCitRunning;
 
     private List<TestItem> pcbcit1list = new ArrayList<TestItem>();
     private List<TestItem> pcbcit2list = new ArrayList<TestItem>();
@@ -122,29 +126,30 @@ public class CITTestHelper extends Application {
     public static final boolean HAS_LED = true;
     public static final boolean HAS_FLASH_LIGHT = false;
     private static Context context =  null;
-	
-	// add by dgy 20170223 for nv 2499 data
-	private byte[] nv2499 = new byte[30];
-	private String nv2499Str = "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUU";
-	//add end
+
+    // add by dgy 20170223 for nv 2499 data
+    private byte[] nv2499 = new byte[30];
+    private String nv2499Str = "UUUUUUUUUUUUUUUUUUUUUUUUUUUUUU";
+
     public static char[] fileResult = new char[90];
-    private static List<ScanResult> scanResults = new ArrayList<ScanResult>();
-    private static BlueToothBean blueTooth;
+    private List<ScanResult> scanResults = new ArrayList<ScanResult>();
+    private String bluetoothList;
 
     static {
-        System.loadLibrary("qcomfm_jni");
-    }
-    @Override
+//        System.loadLibrary("qcomfm_jni");
+    }    @Override
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "CITTestHelper onCreate");
         testMode = NOT_TEST;
+
         fillAllList();
         context = this;
-		// add by dgy read 2499 nv 
-		byte[] nvdata = NvJniItems.getInstance().getNv2499();
-		System.arraycopy(nvdata, 0, nv2499, 0, 30);
-		// add end
+        // add by dgy read 2499 nv
+//        byte[] nvdata = NvJniItems.getInstance().getNv2499();
+//        System.arraycopy(nvdata, 0, nv2499, 0, 30);
+        checkNv2499Data();
+        // add end
     }
     private InputStream getConfigXmlFromSDcard(){
         //Modify for CIT optimization by xiasiping 20140730 start
@@ -181,7 +186,7 @@ public class CITTestHelper extends Application {
     // add PA568 list item by xiasiping 20140811 end
 
     //Modify for CIT optimization by xiasiping 20140730 start
-    public static Context getContext_x(){        
+    public static Context getContext_x(){
         return context;
     }
     //Modify for CIT optimization by xiasiping 20140730 end
@@ -206,6 +211,7 @@ public class CITTestHelper extends Application {
         completecit1list.clear();
         completecit2list.clear();
         completecit3list.clear();
+        keypadList.clear();
         mainList.clear();
         Log.i(TAG, "fillAllList start");
         XmlPullParser xrp = null;
@@ -285,7 +291,7 @@ public class CITTestHelper extends Application {
                     }
                 }
                 else if (xrp.getEventType() == XmlResourceParser.START_TAG && "main".equals(xrp.getName())) {
-                	fillTestListByListType(xrp, "main", mainList);
+                    fillTestListByListType(xrp, "main", mainList);
                 }
                 xrp.next();
             }
@@ -384,35 +390,35 @@ public class CITTestHelper extends Application {
         titleList = null;
         classNameList = null;
         switch (testMode) {
-        case PCB_CIT1:
-            testList = pcbcit1list;
-            break;
-        case PCB_CIT2:
-            testList = pcbcit2list;
-            break;
-        case PCB_CIT3:
-            testList = pcbcit3list;
-            break;
-        case COMPLETE_CIT1:
-            testList = completecit1list;
-            break;
-        case COMPLETE_CIT2:
-            testList = completecit2list;
-            break;
-        case COMPLETE_CIT3:
-            testList = completecit3list;
-            break;
-        case SUBPCB_CIT1:
-            testList = subpcbcit1list;
-            break;
-        case SUBPCB_CIT2:
-            testList = subpcbcit2list;
-            break;
-        case MAIN_CIT:
-        	testList = mainList;
-        	break;
-        default:
-            break;
+            case PCB_CIT1:
+                testList = pcbcit1list;
+                break;
+            case PCB_CIT2:
+                testList = pcbcit2list;
+                break;
+            case PCB_CIT3:
+                testList = pcbcit3list;
+                break;
+            case COMPLETE_CIT1:
+                testList = completecit1list;
+                break;
+            case COMPLETE_CIT2:
+                testList = completecit2list;
+                break;
+            case COMPLETE_CIT3:
+                testList = completecit3list;
+                break;
+            case SUBPCB_CIT1:
+                testList = subpcbcit1list;
+                break;
+            case SUBPCB_CIT2:
+                testList = subpcbcit2list;
+                break;
+            case MAIN_CIT:
+                testList = mainList;
+                break;
+            default:
+                break;
         }
         autoTestListSize = testList.size();
         getTitleAndclassNameList(hasAutoTest);
@@ -443,7 +449,7 @@ public class CITTestHelper extends Application {
             Log.e(TAG, "The test item is error!");
             Toast.makeText(activity, "The test item is error!", 2000).show();
             e.printStackTrace();
-        //Modify for PA568 EVT version by xiasiping 20140807 start
+            //Modify for PA568 EVT version by xiasiping 20140807 start
         } catch (IndexOutOfBoundsException e) {
             Log.e(TAG, "The test item null!");
             Toast.makeText(activity, "The test item is null!", 2000).show();
@@ -522,19 +528,31 @@ public class CITTestHelper extends Application {
     public List<String> getClassNameList(){
         return classNameList;
     }
-	
-	// add by dgy 20170223
-	public byte[] getNv2499Data(){
-		return nv2499;
-	}
-	
-	public void setNv2499String(String nv2499){
-		nv2499Str = nv2499;
-	}
-	
-	public String getNv2499String(){
-		return nv2499Str;
-	}
+
+    // add by dgy 20170223
+    public byte[] getNv2499Data(){
+        checkNv2499Data();
+        return nv2499;
+    }
+
+    public void setNv2499String(String nv2499){
+        nv2499Str = nv2499;
+    }
+
+    public String getNv2499String(){
+        return nv2499Str;
+    }
+    private void checkNv2499Data(){
+        if(nv2499 != null){
+            for(int i=0; i<nv2499.length; i++){
+                if(nv2499[i] == 85 || nv2499[i] == 80 || nv2499[i] == 70 || nv2499[i] ==66 || nv2499[i] ==0){
+                    //nv2499[i] = 70;
+                }else{
+                    nv2499[i] = 70;
+                }
+            }
+        }
+    }
     public List<ScanResult> getScanResults() {
         return scanResults;
     }
@@ -551,12 +569,44 @@ public class CITTestHelper extends Application {
         isStartedBySdCard = startedBySdCard;
     }
 
-    public static BlueToothBean getBlueTooth() {
-        return blueTooth;
+    public String getBluetoothList() {
+        return bluetoothList;
     }
 
-    public static void setBlueTooth(BlueToothBean blueTooth) {
-        CITTestHelper.blueTooth = blueTooth;
+    public void setBluetoothList(String bluetoothList) {
+        this.bluetoothList = bluetoothList;
+    }
+
+    public void setPCBA(boolean PCBA) {
+        isPCBA = PCBA;
+    }
+
+    public boolean isPCBA() {
+        return isPCBA;
+    }
+
+    public boolean isWifiOpened() {
+        return isWifiOpened;
+    }
+
+    public void setWifiOpened(boolean wifiOpened) {
+        isWifiOpened = wifiOpened;
+    }
+
+    public boolean isBlueToothOpened() {
+        return isBlueToothOpened;
+    }
+
+    public void setBlueToothOpened(boolean blueToothOpened) {
+        isBlueToothOpened = blueToothOpened;
+    }
+
+    public boolean isCitRunning() {
+        return isCitRunning;
+    }
+
+    public void setCitRunning(boolean citRunning) {
+        isCitRunning = citRunning;
     }
 
     public void removeSdCardTest() {

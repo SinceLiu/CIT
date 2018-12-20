@@ -7,21 +7,24 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.sim.cit.BlueToothBean;
 import com.sim.cit.CITTestHelper;
 import com.sim.cit.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BlueToothService extends Service {
+    private static final String TAG = "CIT_BluetoothService";
     private BluetoothAdapter mBluetoothAdapter = null;
-    BluetoothDevice device = null;
-    IntentFilter intentFilter;
-    CITTestHelper application;
+    private BluetoothDevice device = null;
+    private IntentFilter intentFilter;
+    private CITTestHelper application;
+    private boolean mReceiverTag = false;  //标记receiver是否注册
+    private String bluetoothList = "";
+    private List<String> devices;   //用于去重
 
     public BlueToothService(){
     }
@@ -34,18 +37,22 @@ public class BlueToothService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("BlueToothService", "Service onCreate()");
+        Log.e(TAG, "Service onCreate()");
         application = (CITTestHelper)getApplication();
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        devices = new ArrayList<String>();
         intentFilter = new IntentFilter();
+        intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         intentFilter.addAction(BluetoothDevice.ACTION_FOUND);
         this.registerReceiver(blueToothReceiver, intentFilter);
+        mReceiverTag = true;
         if (mBluetoothAdapter.getState() != BluetoothAdapter.STATE_ON) {
             if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_TURNING_OFF) {
 
             } else {
+                Log.e(TAG,"开启蓝牙");
                 mBluetoothAdapter.enable();
             }
         } else if (!mBluetoothAdapter.isDiscovering()) {
@@ -56,53 +63,60 @@ public class BlueToothService extends Service {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        Log.e(TAG,"onDestroy()");
+        application.setBluetoothList(bluetoothList);
         if (mBluetoothAdapter.isDiscovering()) {
             mBluetoothAdapter.cancelDiscovery();
         }
-        if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
+        if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON && !application.isBlueToothOpened()) {
             mBluetoothAdapter.disable();
+            Log.e(TAG,"关闭蓝牙");
         }
-        unregisterReceiver(blueToothReceiver);
+        if(mReceiverTag){
+            mReceiverTag = false;
+            unregisterReceiver(blueToothReceiver);
+        }
     }
 
     private BroadcastReceiver blueToothReceiver=new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            Log.e(TAG,"Action: "+action);
+
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
-                    Log.i("progress", "BluetoothAdapter.getState()==true");
+                    Log.i(TAG, "BluetoothAdapter.getState()==true");
                     if (!mBluetoothAdapter.isDiscovering()) {
                         mBluetoothAdapter.startDiscovery();
                     }
                 }
-                /*if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_OFF) {
-                    mBluetoothAdapter.enable();
-                }*/
             }
+
+            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+                bluetoothList = "";
+            }
+
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                device= intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                mBluetoothAdapter.cancelDiscovery();
-                mHandler.sendMessage(mHandler.obtainMessage());
-                Log.i("progress", "BluetoothDevice.ACTION_FOUND device="+device.getAddress());
+                device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Log.e(TAG, device.getName() + "---" + device.getAddress());
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED &&
+                        !devices.contains(device.getAddress())) {   //去重
+                    bluetoothList += device.getName() + "———" + getString(R.string.bluetooth_mac_address) + device.getAddress()
+                            + "\n";
+                }
+                devices.add(device.getAddress());
             }
             if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                application.setBluetoothList(bluetoothList);
+                devices.clear();
                 mBluetoothAdapter.cancelDiscovery();
-                mHandler.sendMessage(mHandler.obtainMessage());
-                Log.i("progress", "BluetoothDevice.ACTION_DISCOVERY_FINISHED");
+                if(mReceiverTag){
+                    mReceiverTag = false;
+                    unregisterReceiver(blueToothReceiver);
+                }
+                stopSelf();
             }
-        }
-    };
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if(device!=null){
-                BlueToothBean blueTooth = new BlueToothBean(device.getAddress(),device.getName());
-                application.setBlueTooth(blueTooth);
-            }
-            /*Intent i = new Intent("android.settings.BLUETOOTH_SETTINGS");
-            startActivity(i);*/
         }
     };
 

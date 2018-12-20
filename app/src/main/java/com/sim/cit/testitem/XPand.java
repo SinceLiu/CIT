@@ -58,12 +58,6 @@ public class XPand extends TestActivity{
         isUrtVolPass = ("0".equals(NodeHelper.readUARTNode()));
         Log.d(TAG,"onCreate isUrtVolPass is " +isUrtVolPass);
         bindView();
-        try {
-            oldBrightValue = Settings.System.getInt(XPand.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
-            Settings.System.putInt(XPand.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, Integer.MAX_VALUE - 1);
-        } catch (SettingNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -77,7 +71,6 @@ public class XPand extends TestActivity{
             NodeHelper.disableUSB();
         }
         NodeHelper.writeOTG();
-        Settings.System.putInt(XPand.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, oldBrightValue);
 
         super.finish();
 

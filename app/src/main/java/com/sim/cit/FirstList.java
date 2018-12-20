@@ -27,9 +27,10 @@ public class FirstList extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		requestWindowFeature(Window.FEATURE_NO_TITLE);   
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //屏幕常亮,不修改系统休眠时间
         
         context = getApplicationContext();
         ArrayList<String> mainList = new ArrayList<String>();
@@ -38,9 +39,8 @@ public class FirstList extends ListActivity {
         Log.i("lvhongshan",testTypeIntent.getStringExtra(CITTestHelper.EXTRA_KEY_TEST_TYPE));
 	    if(CITTestHelper.EXTRA_VALUE_TEST_TYPE_PCB.equals(testTypeIntent.getStringExtra(CITTestHelper.EXTRA_KEY_TEST_TYPE))){
 	    	mainList.add(getString(R.string.title_pcba_auto));
-	    	//modify by hwj20170515
-//            mainList.add(getString(R.string.title_pcba_sensorAuto));
-//            mainList.add(getString(R.string.title_WBGauto));
+            mainList.add(getString(R.string.title_pcba_sensorAuto));
+            mainList.add(getString(R.string.title_WBGauto));
 	    }else if(CITTestHelper.EXTRA_VALUE_TEST_TYPE_SUBPCB.equals(testTypeIntent.getStringExtra(CITTestHelper.EXTRA_KEY_TEST_TYPE))){
             //mainList.add("B1");
             mainList.add("B1");

@@ -46,6 +46,7 @@ public class CameraFront extends TestActivity implements SurfaceHolder.Callback 
     private static Context mContext = null;
     public static final boolean LOG = true;
 
+
     @Override
     public void finish() {
 

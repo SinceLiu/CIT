@@ -1,6 +1,7 @@
 package com.sim.cit.testitem;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,11 +26,14 @@ public class TouchForG600 extends TestActivity {
 
     }
 
-    /*@Override
+    @Override
     public void finish() {
-        unregisterReceiver(mReceiver);
+        Log.e("TouchForG600","finish()");
         super.finish();
-    }*/
+        DrawView drawView = (DrawView)findViewById(R.id.draw_view);
+        drawView.exit();   //停止绘制
+    }
+
 
 //    @Override
 //    protected void onResume() {

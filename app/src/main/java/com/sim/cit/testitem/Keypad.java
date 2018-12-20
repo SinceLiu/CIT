@@ -141,19 +141,19 @@ public class Keypad extends TestActivity {
         Log.i("Keypad","onKeyDown keycode is " +keyCode);
         switch (keyCode) {
         case KeyEvent.KEYCODE_VOLUME_DOWN:
-//        	if(mAudioManager.isWiredHeadsetOn()){
-//        		changeColor("Slide_key_0");
-//        	}else {
+        	if(mAudioManager.isWiredHeadsetOn()){
+        		changeColor("Slide_key_0");
+        	}else {
         		changeColor("down");
-//			}
+			}
             break;
         //Modify for PA568 keypad test by xiasiping 20140807 start
         case KeyEvent.KEYCODE_VOLUME_UP:
-//            if(mAudioManager.isWiredHeadsetOn()){
-//            	changeColor("Slide_key_2000");
-//        	}else {
+            if(mAudioManager.isWiredHeadsetOn()){
+            	changeColor("Slide_key_2000");
+        	}else {
         		changeColor("up");
-//			}
+			}
             break;
         /*case KeyEvent.KEYCODE_BRIGHTNESS_UP:
             changeColor("function_1");

@@ -15,16 +15,18 @@ import android.util.Log;
 import com.sim.cit.CITTestHelper;
 import com.sim.cit.R;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WlanService extends Service {
     private WifiManager wm;
     IntentFilter intentFilter;
-    private final int START_SCAN_WLAN = 123;
-    private final int GET_SCAN_RESULTS = 124;
+    private static final int START_SCAN_WLAN = 123;
+    private static final int GET_SCAN_RESULTS = 124;
     List<ScanResult> scanResults = new ArrayList<ScanResult>();
     CITTestHelper application;
+    private MyHandler mHandler;
 
 
     public WlanService() {
@@ -39,8 +41,10 @@ public class WlanService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.e("WlanService","onCreate()");
         application = (CITTestHelper) getApplication();
-        wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        mHandler = new MyHandler(this);
+        wm = (WifiManager) application.getSystemService(Context.WIFI_SERVICE);
         intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
@@ -56,6 +60,7 @@ public class WlanService extends Service {
                 Log.i("progress", "WifiManager.WIFI_STATE_DISABLING");
             } else {
                 wm.setWifiEnabled(true);
+                Log.e("WlanService","开启wifi");
                 Log.i("progress", "WifiManager.setWifiEnabled(true)");
             }
         } else if (wm.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
@@ -68,12 +73,15 @@ public class WlanService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.e("WlanService","onDestroy()");
         mHandler.removeMessages(START_SCAN_WLAN);
-        if (wm.isWifiEnabled()) {
+        if (wm.isWifiEnabled() && !application.isWifiOpened()) {
             wm.setWifiEnabled(false);
-            Log.i("progress", "onDestroy_WifiManager.setWifiEnabled(false)");
+            Log.e("WlanService","关闭wifi");
+
         }
         unregisterReceiver(wifiReceiver);
+        mHandler.removeCallbacksAndMessages(null);  //把消息对象从消息队列移除
     }
 
     private BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
@@ -97,33 +105,25 @@ public class WlanService extends Service {
         }
     };
 
-    private Handler mHandler = new Handler() {
+    private static class MyHandler extends Handler{
+        private WeakReference<WlanService> reference;
+        public MyHandler(WlanService service) {
+            reference = new WeakReference<WlanService>(service);
+        }
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            WlanService wlanService = reference.get();
             switch (msg.what) {
                 case START_SCAN_WLAN:
-                    wm.startScan();
+                    wlanService.wm.startScan();
                     sendEmptyMessageDelayed(START_SCAN_WLAN, 10 * 1000);
                     break;
                 default:
                     break;
-                /*Intent i = new Intent();
-                i.setClassName("com.android.settings",
-                "com.android.settings.wifi.WifiSettings");
-                startActivity(i);*/
             }
-            //add for auto test wlan by lxx 20180727
-            Log.i("WlanService", "size: " + scanResults.size());
-//            if (scanResults.size() >= 8) {
-//                application.getTestResultMaps().get(CITTestHelper.COMPLETE_ALL)
-//                        .get(13).setTestResult(CITTestHelper.TEST_RESULT_PASS);  //13: WIFI position
-//                stopSelf();
-//            } else {
-//                application.getTestResultMaps().get(CITTestHelper.COMPLETE_ALL)
-//                        .get(13).setTestResult(CITTestHelper.TEST_RESULT_FAIL);
-//            }
-            application.setScanResults(scanResults);  //add for show wifi listView quickly by lxx 20180727
+            Log.i("WlanService", "size: " + wlanService.scanResults.size());
+            wlanService.application.setScanResults(wlanService.scanResults);  //add for show wifi listView quickly by lxx 20180727
         }
-    };
+    }
 }

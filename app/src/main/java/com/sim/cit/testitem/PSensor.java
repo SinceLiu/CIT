@@ -162,6 +162,7 @@ public class PSensor extends TestActivity {
         protected void onDestroy() {
 //            mTimerReadPsensor.cancel();
             super.onDestroy();
+            mHandler.removeCallbacksAndMessages(null);  //把消息对象从消息队列移除
         }
 
         //Modify for P-sensor change by xiasiping 20140808 end
@@ -223,7 +224,8 @@ public class PSensor extends TestActivity {
 //			Log.i("hwj","isNear --- " + isNear);
 			if (isNear) {
                                 //Modify for P-sensor change by xiasiping 20140808 start
-				if (newValue == 0) {
+//				if (newValue == 0) {
+				if (newValue < 5) {
 					imageView[0].setVisibility(View.INVISIBLE);
 					imageView[1].setVisibility(View.VISIBLE);
 				} else if (newValue >= 5) {
@@ -231,10 +233,12 @@ public class PSensor extends TestActivity {
 					imageView[1].setVisibility(View.INVISIBLE);
 				}
 			} else {
-				if (newValue >= 5) {
+				if (newValue > 5) {
 					imageView[0].setVisibility(View.VISIBLE);
 					imageView[1].setVisibility(View.INVISIBLE);
-				} else if (newValue == 0) {
+				} 
+//				else if (newValue == 0) {
+				else if (newValue < 5) {
 					imageView[0].setVisibility(View.INVISIBLE);
 					imageView[1].setVisibility(View.VISIBLE);
 				}

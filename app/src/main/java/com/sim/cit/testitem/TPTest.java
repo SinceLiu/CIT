@@ -33,7 +33,7 @@ public class TPTest extends Activity {
 	private static Paint mPaint;
 	private static int screen_X;
 	private static int screen_Y;
-	public class TouchView extends View {
+	class TouchView extends View {
 		boolean[] begin_end = null;
 		public int flag;
 		public float percent = 0.98f;
@@ -171,33 +171,16 @@ public class TPTest extends Activity {
 			Log.v(TAG, "touch_up_times=" + times);
 		
 			
-//			if (iCurrentStep <= 4)
-//			{
-				if (judgeStep1())
+			if (iCurrentStep <= 4)
+			{
+				if (judgeStep())
 				{
-					//edit by cjr 2017.5.8
-//					iCurrentStep ++;
-					new AlertDialog.Builder(getContext()).setTitle(R.string.tp_pass)
-						.setPositiveButton(R.string.tp_confirm, 
-								new DialogInterface.OnClickListener(){
-									public void onClick(DialogInterface dialog, int whichButton)
-									{
-										Bundle b = new Bundle();
-										Intent intent = new Intent();
-										b.putInt("test_result", 1);
-										intent.putExtras(b);
-										setResult(RESULT_OK, intent);
-										finish();
-									}
-						}).setCancelable(false).show();
-					Intent tp_intent = new Intent();
-					tp_intent.setAction("ACTION_TP_PASS");
-					mContext.sendBroadcast(tp_intent);
+					iCurrentStep ++;
 				}
-//			}
-
+			}
+			
+		
 			path.lineTo(f, f1);
-
 			/*Canvas canvas = mCanvas;
 			Path path1 = mPath;
 			Paint paint = TPTest.mPaint;

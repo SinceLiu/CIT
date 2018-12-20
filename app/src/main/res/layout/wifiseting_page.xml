@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-   
 
     <TextView
         android:id="@+id/tv_wifi_24g"
@@ -28,13 +27,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp" />
-	 <Button
+
+    <Button
         android:id="@+id/btn_discovery_wifipoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingTop="10dp"
         android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         android:textSize="25sp" />
 
     <include

@@ -1,48 +1,45 @@
 <test>
     <pcb>
         <cit1>
-            <testitem title="喇叭按键" className="Colligate" isSet="0"/>
+            <testitem title="喇叭按键" className="Colligate" isSet="1"/>
             <testitem title="SD卡" className="TFCard" isSet="1"/>
-            <testitem title="喇叭" className="SpeakerTest" isSet="1"/>
+            <testitem title="喇叭" className="SpeakerTest" isSet="0"/>
             <testitem title="震动" className="Vibrate" isSet="0"/>
             <testitem title="后置摄像头" className="BackCamera" isSet="1"/>
             <testitem title="前置摄像头" className="FrontCamera" isSet="1"/>
-            <testitem title="听筒" className="Receiver" isSet="1"/>
+            <testitem title="听筒" className="Receiver" isSet="0"/>
             <testitem title="IRIS Test" className="IRISking" isSet="0"/>
             <testitem title="FlashLed" className="FlashLight" isSet="0"/>
             <testitem title="IR LED Test" className="IRLed" isSet="0"/>
             <testitem title="Sleep/wake" className="BackLight" isSet="0"/>
-            <testitem title="MIC,Receiver Loopback" className="MainMic" isSet="0"/>
+            <testitem title="MIC,Receiver Loopback" className="ReceiverLoopback" isSet="0"/>
             <testitem title="RGB LEDS Test" className="Led" isSet="0"/>
             <testitem title="录音" className="SecondMic" isSet="1"/>
             <testitem title="SecondMic" className="SecondMic" isSet="0"/>
-            <testitem title="按键" className="Keypad" isSet="1"/>
+            <!-- <testitem title="按键" className="Keypad" isSet="1"/>-->
             <testitem title="KeyboardLight" className="KeyBoardLed" isSet="0"/>
             <testitem title="耳机录音" className="HeadsetLoopback" isSet="0"/>
             <testitem title="FM" className="FM" isSet="0"/>
             <testitem title="U盘" className="UDisk" isSet="0"/>
-            <testitem title="充电" className="BatteryChargeState" isSet="0"/>
+            <testitem title="充电" className="BatteryChargeState" isSet="1"/>
             <testitem title="NFC" className="NFC" isSet="0"/>
             <testitem title="Heartbeat" className="HeartbeatforPCBA" isSet="0"/>
             <testitem title="XPAND" className="XPand" isSet="0"/>
             <testitem title="FingerPrint" className="FingerPrintTest" isSet="0"/>
-            <!--<testitem title="FingerPrint" className="FingerPrintCali" isSet="1"/>-->
-			<!--
-        </cit1>
-        <cit2>
-		-->
-            <testitem title="重力感应" className="MotionSensorSimple" isSet="1"/>
+            <testitem title="FingerPrint" className="FingerPrintCali" isSet="0"/>
+        <!--</cit1>-->
+        <!--<cit2>-->
+            <testitem title="重力感应" className="MotionSensor" isSet="1"/>
             <testitem title="Ecompass" className="EcompassComplete" isSet="0"/>
             <testitem title="Gyroscope" className="Gyroscope" isSet="0"/>
             <testitem title="距离感应" className="PSensor" isSet="1"/>
             <testitem title="光线感应" className="LightSensor" isSet="1"/>
-			<!--
-        </cit2>
-        <cit3>
-		-->
+        <!--</cit2>-->
+        <!--<cit3>-->
             <testitem id="WIFI" className="Wlan" isSet="1"/>
             <testitem id="蓝牙" className="Bluetooth" isSet="1"/>
             <testitem id="GPS/BD" className="GpsforPCBA" isSet="0"/>
+        <!--</cit3>-->
         </cit1>
     </pcb>
     <subpcb>
@@ -52,21 +49,24 @@
             <testitem title="FingerPrint" className="FingerPrintCali" isSet="0"/>
         </cit1>-->
         <cit1>
-            <testitem title="录音" className="SecondMic" isSet="1"/>
-            <testitem title="普通充电" className="BatteryChargeState" isSet="1"/>
+            <testitem title="MIC,Receiver Loopback" className="ReceiverLoopback" isSet="1"/>
+            <testitem title="Charge test" className="BatteryChargeState" isSet="1"/>
             <testitem title="KeyboardLight" className="KeyBoardLed" isSet="0"/>
             <testitem title="Vibrate" className="Vibrate" isSet="0"/>
-            <testitem title="SD卡" className="TFCard" isSet="1"/>
+            <testitem title="SDcard" className="TFCard" isSet="0"/>
         </cit1>
 
     </subpcb>
     <complete>
         <cit1>
-            <!-- <testitem title="Sim,Vibrate,Speaker" className="Colligate" isSet="0"/> -->
+            <!-- <testitem title="Sim,Vibrate,Speaker" className="Colligate" isSet="1"/> -->
             <testitem title="喇叭按键" className="Colligate" isSet="1"/>
             <testitem title="SD卡" className="TFCard" isSet="1"/>
+            <!-- <testitem title="触摸屏" className="TouchFor511" isSet="1"/> -->
             <testitem title="触摸屏" className="TouchForG600" isSet="1"/>
             <testitem title="显示屏" className="Lcd" isSet="1"/>
+            <!-- <testitem title="Back Camera" className="CameraBack" isSet="1"/>
+            <testitem title="Front camera" className="CameraFront" isSet="1"/> -->
             <testitem title="后置摄像头" className="BackCamera" isSet="1"/>
             <testitem title="前置摄像头" className="FrontCamera" isSet="1"/>
             <testitem title="IRIS Test" className="CameraActivity" isSet="0"/>
@@ -76,15 +76,16 @@
             <testitem title="IRShading Test" className="IRShading" isSet="0"/>
             <testitem title="FlashLed" className="FlashLight" isSet="0"/>
             <testitem title="IR LED Test" className="IRLed" isSet="0"/>
-            <testitem title="普通充电" className="BatteryChargeState" isSet="1"/>
-            <testitem title="录音" className="SecondMic" isSet="1"/>
-            <!--<testitem title="KeyboardLight" className="FlashLEDTestActivity" isSet="1"/>-->
+            <testitem title="普通充电" className="BatteryChargeState" isSet="0"/>
+            <testitem title="快充" className="BatteryChargeStateQuick" isSet="0"/>
+            <testitem title="MIC,Receiver Loopback" className="ReceiverLoopback" isSet="0"/>
+            <testitem title="KeyboardLight" className="FlashLEDTestActivity" isSet="0"/>
             <testitem title="RGB LEDS Test" className="Led" isSet="0"/>
-            <testitem title="SecondMic,Speaker Loopback" className="MainMic" isSet="0"/>
+            <testitem title="录音" className="SecondMic" isSet="1"/>
             <testitem title="SecondMic" className="SecondMic" isSet="0"/>
-            <testitem title="按键" className="Keypad" isSet="0"/>
+            <!-- <testitem title="按键" className="Keypad" isSet="1"/> -->
             <testitem title="KeyboardLight" className="KeyBoardLed" isSet="0"/>
-            <testitem title="耳机" className="HeadsetLoopback" isSet="1"/>
+            <testitem title="耳机" className="HeadsetLoopback" isSet="0"/>
             <testitem title="FM" className="FM" isSet="0"/>
             <testitem title="U盘" className="UDisk" isSet="0"/>
             <testitem title="Sleep/wake" className="BackLight" isSet="0"/>
@@ -127,7 +128,6 @@
         <keyitem name="Slide_key_2000" isSet="0" />
         <keyitem name="sos" isSet="0" />
     </keypad>
-    
     <main>
         <testitem title="喇叭按键" className="Colligate" isSet="1"/>
         <testitem title="SD卡" className="TFCard" isSet="1"/>
@@ -135,14 +135,15 @@
         <testitem title="显示屏" className="Lcd" isSet="1"/>
         <testitem title="后置摄像头" className="BackCamera" isSet="1"/>
         <testitem title="前置摄像头" className="FrontCamera" isSet="1"/>
-        <testitem title="普通充电" className="BatteryChargeState" isSet="1"/>
-        <testitem title="录音" className="SecondMic" isSet="1"/>
-        <testitem title="按键" className="Keypad" isSet="0"/>
-        <testitem title="耳机" className="HeadsetLoopback" isSet="1"/>
+        <testitem title="耳机" className="HeadsetLoopback" isSet="0"/>
+        <testitem title="U盘" className="UDisk" isSet="0"/>
         <testitem title="重力感应" className="MotionSensor" isSet="1"/>
         <testitem title="距离感应" className="PSensor" isSet="1"/>
         <testitem title="光线感应" className="LightSensor" isSet="1"/>
         <testitem id="WIFI" className="Wlan" isSet="1"/>
         <testitem id="蓝牙" className="Bluetooth" isSet="1"/>
+        <testitem title="录音" className="SecondMic" isSet="1"/>
+        <!--<testitem title="按键" className="Keypad" isSet="1"/>-->
+        <testitem title="普通充电" className="BatteryChargeState" isSet="1"/>
     </main>
 </test>

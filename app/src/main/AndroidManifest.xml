@@ -3,10 +3,16 @@
     package="com.sim.cit"
     android:versionCode="180712001"
     android:versionName="1.2.1"
-    ><!-- android:sharedUserId="android.uid.system" -->
+    android:sharedUserId="android.uid.system" >
         <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.INTERNET" />
@@ -14,18 +20,27 @@
 	<uses-permission android:name="android.permission.WRITE_MEDIA_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SECURES"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_SECURES">
+    </uses-permission>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.DEVICE_POWER"/>
-    <uses-permission android:name="android.permission.CAMERA"></uses-permission>
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.HARDWARE_TEST"></uses-permission>
-    <uses-permission android:name="android.permission.INJECT_EVENTS"></uses-permission>
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.CAMERA">
+    </uses-permission>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS">
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION">
+    </uses-permission>
+    <uses-permission android:name="android.permission.HARDWARE_TEST">
+    </uses-permission>
+    <uses-permission android:name="android.permission.INJECT_EVENTS">
+    </uses-permission>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD">
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION">
+    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION">
+    </uses-permission>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -94,7 +109,9 @@
     <uses-permission android:name="com.qualcomm.permission.USE_QCRIL_MSG_TUNNEL" />
     <!--Modify for add androidL camera permission by lizhaobo 20151111 end-->
 
-    <application android:name=".CITTestHelper" android:icon="@drawable/icon" android:label="@string/app_name"
+    <application android:name=".CITTestHelper"
+        android:icon="@drawable/icon" android:label="@string/app_name"
+
         android:theme="@android:style/Theme.Light">
 
         <uses-library
@@ -131,7 +148,8 @@
         <activity android:name=".TempListActivity" android:label="@string/app_name"  android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".MainList" android:label="@string/app_name"  android:screenOrientation="portrait">
+        <activity android:name=".MainList" android:label="@string/app_name"  android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize">
           <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -142,6 +160,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".FirstList" android:label="@string/app_name"  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".testitem.BatteryChargeStateQuick" android:screenOrientation="portrait">
         </activity>
         <activity android:name=".SecondList" android:label="@string/app_name"  android:screenOrientation="portrait">
         </activity>
@@ -299,6 +319,14 @@
         <activity android:name=".testitem.BluetoothSetting" android:label="@string/app_name"  android:screenOrientation="portrait">
         </activity>
 
+        <activity
+            android:name=".testitem.ClearDataActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize|fontScale|keyboardHidden"
+            >
+        </activity>
+
         <activity android:name=".testitem.TouchFor511" android:label="@string/app_name"  android:screenOrientation="portrait">
         </activity>
           <activity android:name=".testitem.TouchForG600" android:label="@string/app_name"  android:screenOrientation="portrait">
@@ -346,8 +374,6 @@
         </activity>
 <!--Modify for add NFC Feature by liyunlong 20140301 end-->
 
-        <activity android:name=".testitem.Receiver" android:label="@string/app_name"  android:screenOrientation="portrait">
-    </activity>
 
         <activity android:name=".testitem.UsbMode"
                   android:label="@string/app_name"  android:screenOrientation="portrait">
@@ -417,8 +443,6 @@
         <activity android:name=".autotest.SecondMic" android:exported="true" android:label="@string/app_name"  android:screenOrientation="portrait">
         </activity>
         <activity android:name=".autotest.SpeakerLoopback" android:exported="true" android:label="@string/app_name"  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".autotest.HeadsetLoopback" android:exported="true" android:label="@string/app_name"  android:screenOrientation="portrait">
         </activity>
         <activity android:name=".autotest.Version" android:exported="true" android:label="@string/app_name"  android:screenOrientation="portrait">
         </activity>
@@ -496,14 +520,16 @@
          </intent-filter>
 		</receiver>
         <service
-            android:name=".testitem.BlueToothService
+            android:name=".testitem.BlueToothService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="true" >
+        </service>
         <service
             android:name=".testitem.WlanService"
             android:enabled="true"
             android:exported="true">
         </service>
+
     </application>
 
 

@@ -90,6 +90,7 @@ public class TestActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //屏幕常亮,不修改系统休眠时间
 
         context = getApplicationContext();
         application = (CITTestHelper) getApplication();
@@ -335,7 +336,7 @@ public class TestActivity extends Activity {
 //                            }
                     byte[] data = application.getNv2499Data();
                     data[19 - 1] = (byte) result;
-                    NvJniItems.getInstance().writeNv2499(data);
+//                    NvJniItems.getInstance().writeNv2499(data);
                 } catch (Exception e) {
                     Log.e(TAG, "~~~~~~Exception" + e);
                     //mQcRilHook.writeNvFactoryData(19,result);
@@ -359,7 +360,7 @@ public class TestActivity extends Activity {
 //                            }
                     byte[] data = application.getNv2499Data();
                     data[18 - 1] = (byte) result;
-                    NvJniItems.getInstance().writeNv2499(data);
+//                    NvJniItems.getInstance().writeNv2499(data);
                 } catch (Exception e) {
                     Log.e(TAG, "~~~~~~Exception" + e);
                     //mQcRilHook.writeNvFactoryData(18,result);
@@ -383,7 +384,7 @@ public class TestActivity extends Activity {
 //                            }
                     byte[] data = application.getNv2499Data();
                     data[17 - 1] = (byte) result;
-                    NvJniItems.getInstance().writeNv2499(data);
+//                    NvJniItems.getInstance().writeNv2499(data);
                 } catch (Exception e) {
                     Log.e(TAG, "~~~~~~Exception" + e);
                     //mQcRilHook.writeNvFactoryData(17,result);
@@ -407,7 +408,7 @@ public class TestActivity extends Activity {
 //                            }
                     byte[] data = application.getNv2499Data();
                     data[9 - 1] = (byte) result;
-                    NvJniItems.getInstance().writeNv2499(data);
+//                    NvJniItems.getInstance().writeNv2499(data);
                 } catch (Exception e) {
                     Log.e(TAG, "~~~~~~Exception" + e);
                     //mQcRilHook.writeNvFactoryData(9,result);
@@ -431,7 +432,7 @@ public class TestActivity extends Activity {
 //                            }
                     byte[] data = application.getNv2499Data();
                     data[8 - 1] = (byte) result;
-                    NvJniItems.getInstance().writeNv2499(data);
+//                    NvJniItems.getInstance().writeNv2499(data);
                 } catch (Exception e) {
                     Log.e(TAG, "~~~~~~Exception" + e);
                     //mQcRilHook.writeNvFactoryData(8,result);
@@ -455,7 +456,7 @@ public class TestActivity extends Activity {
 //                            }
                     byte[] data = application.getNv2499Data();
                     data[7 - 1] = (byte) result;
-                    NvJniItems.getInstance().writeNv2499(data);
+//                    NvJniItems.getInstance().writeNv2499(data);
                 } catch (Exception e) {
                     Log.e(TAG, "~~~~~~Exception" + e);
                     //mQcRilHook.writeNvFactoryData(7,result);

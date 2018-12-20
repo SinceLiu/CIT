@@ -93,7 +93,7 @@ public class FM extends TestActivity {
                     }else {
                         Log.i(TAG,"isReceiverBroadcast is false");
                         mFmManager.openFM();
-                        mFmManager.mReceiver.enable(mFmManager.getFmDefConfig());
+                        mFmManager.mReceiver.enable(mFmManager.getFmDefConfig(),mContext);
                         AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
                         Intent mIntent = new Intent("android.intent.action.FM");
                         mIntent.putExtra("state", 1);
@@ -191,7 +191,7 @@ public class FM extends TestActivity {
                 if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
                     if (intent.getIntExtra("state", 0) == 1) {
                         mFmManager.openFM();
-                        mFmManager.mReceiver.enable(mFmManager.getFmDefConfig());
+                        mFmManager.mReceiver.enable(mFmManager.getFmDefConfig(),mContext);
                         AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
                         //modify for open fm in cit reflect slow by songguangyu 20140319 -bug14182 start
                         //mFmManager.test(true);
@@ -314,7 +314,7 @@ public class FM extends TestActivity {
 
     private void startFM(){
             AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
-                                AudioSystem.DEVICE_STATE_AVAILABLE, "");
+                                AudioSystem.DEVICE_STATE_AVAILABLE, "","");
             AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
             mFmManager.mReceiver.setStation(98500);
     }

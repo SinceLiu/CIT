@@ -48,12 +48,6 @@ public class ReceiverPinknoiseTest extends TestActivity {
         tvTime = (TextView)findViewById(R.id.txt_time);
         tvHint.setText(getString(R.string.str_receiver_hint));
         tvTime.setText(getString(R.string.str_receiver_time));
-        try {
-            oldBrightValue = Settings.System.getInt(ReceiverPinknoiseTest.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
-        } catch (SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        Settings.System.putInt(ReceiverPinknoiseTest.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, Integer.MAX_VALUE -1);
     }
 
     private void startReceiver(){
@@ -98,7 +92,6 @@ public class ReceiverPinknoiseTest extends TestActivity {
         isTest=false;
 
         mCalculateTimeTimer.cancel();
-        //Settings.System.putInt(ReceiverPinknoiseTest.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, oldBrightValue);
     }
     class CalculateTimeTask extends TimerTask {
         public void run() {

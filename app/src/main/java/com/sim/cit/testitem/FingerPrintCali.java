@@ -85,12 +85,6 @@ public class FingerPrintCali extends TestActivity implements OnClickListener{
         mHandler = new MyHandler();
 
         try {
-            oldBrightValue = Settings.System.getInt(FingerPrintCali.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT);
-            Settings.System.putInt(FingerPrintCali.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, Integer.MAX_VALUE - 1);
-        } catch (SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
             mbuffer = new byte[FINGER_IMAGE_WIDTH * FINGER_IMAGE_HEIGHT];
             mBitmap = Bitmap.createBitmap(FINGER_IMAGE_WIDTH, FINGER_IMAGE_HEIGHT, Bitmap.Config.ALPHA_8);
             dst = ByteBuffer.allocate(FINGER_IMAGE_WIDTH * FINGER_IMAGE_HEIGHT);
@@ -321,7 +315,6 @@ public class FingerPrintCali extends TestActivity implements OnClickListener{
 
         threadRunning = false;
 
-        Settings.System.putInt(FingerPrintCali.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, oldBrightValue);
         super.onDestroy();
     }
 

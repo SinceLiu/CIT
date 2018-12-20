@@ -22,6 +22,7 @@
             android:id="@+id/tv_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:textSize="30sp" />
 
@@ -29,6 +30,7 @@
             android:id="@+id/tv_voltage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:textSize="30sp" />
 
@@ -37,62 +39,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_gravity="center"
             android:text="@string/please_input_charger"
-            android:textSize="30sp" />
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:text="@string/software_version"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/tv_software_version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/tp_manufacturer_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/tp_type"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/lcd_manufacturer_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/lcd_type"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/front_camera_manufacturer_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/front_camera_type"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/back_camera_manufacturer_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/camera_type"
-            android:textSize="30sp" />
-
-        <TextView
-            android:id="@+id/rom_manufacturer_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/rom_type"
             android:textSize="30sp" />
     </LinearLayout>
 

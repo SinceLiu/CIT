@@ -48,14 +48,11 @@ public class CameraBack extends TestActivity implements SurfaceHolder.Callback {
 	final static String TAG = "CameraBack";
 	private static Context mContext = null;
 	public static final boolean LOG = true;
-	private int oldBrightValue = 0;
 
 	@Override
 	public void finish() {
 
 		stopCamera();
-		Settings.System.putInt(CameraBack.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT,
-				oldBrightValue);
 		// Utilities.writeCurMessage(TAG, resultString);
 		// logd(resultString);
 		super.finish();
@@ -72,20 +69,6 @@ public class CameraBack extends TestActivity implements SurfaceHolder.Callback {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		setContentView(R.layout.camera_back);
-		// Modify for fix the problem of sleep when testing by lvhongshan
-		// 20140404 start
-		try {
-			oldBrightValue = Settings.System.getInt(CameraBack.this.getContentResolver(),
-					Settings.System.SCREEN_OFF_TIMEOUT);
-		} catch (SettingNotFoundException e) {
-			e.printStackTrace();
-		}
-		Log.e(TAG, "-----------------------------kakakaa");
-		Settings.System.putInt(CameraBack.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT,
-				Integer.MAX_VALUE - 1);
-				// Modify for fix the problem of sleep when testing by
-				// lvhongshan 20140404 end
-
 		/* SurfaceHolder set */
 		mSurfaceView = (SurfaceView) findViewById(R.id.mSurfaceView);
 		mSurfaceHolder = mSurfaceView.getHolder();
@@ -128,8 +111,6 @@ public class CameraBack extends TestActivity implements SurfaceHolder.Callback {
 				setResult(RESULT_OK);
 				stopCamera();
 				autoTestNextItem(true);
-				Settings.System.putInt(CameraBack.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT,
-						oldBrightValue);
 				// add for mark test results by songguangyu 20140220 start
 				setTestResult(CITTestHelper.TEST_RESULT_PASS);
 				// add for mark test results by songguangyu 20140220 end
@@ -144,8 +125,6 @@ public class CameraBack extends TestActivity implements SurfaceHolder.Callback {
 				setResult(RESULT_CANCELED);
 				stopCamera();
 				autoTestNextItem(false);
-				Settings.System.putInt(CameraBack.this.getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT,
-						oldBrightValue);
 				// add for mark test results by songguangyu 20140220 start
 				setTestResult(CITTestHelper.TEST_RESULT_FAIL);
 				// add for mark test results by songguangyu 20140220 end
@@ -266,7 +245,7 @@ public class CameraBack extends TestActivity implements SurfaceHolder.Callback {
 			} else
 				fail(getString(R.string.autofocus_fail));
 		}
-	};
+	}
 
 	private void startCamera() {
 

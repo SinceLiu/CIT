@@ -16,6 +16,7 @@
     <string name="test_info_1">以上的</string>
     <string name="test_info_2">项测试全部通过</string>
     <string name="clear_data">清除数据</string>
+    <string name="notice">清除数据后，请等待机器重启，在此之间请不要做任何操作。重启后，请确认进入开机向导！</string>
     <!-- exit-->     
     <string name="alert_dialog_ok">确定</string>
     <string name="alert_dialog_cancel">取消</string>
@@ -28,8 +29,10 @@
     <string name="sim_status_3"> 锁定: 需要用户用 PUK码来解锁</string>
     <string name="sim_status_4"> 锁定: 需要用户用网络 PIN码来解锁</string>
     <string name="sim_status_5"> 可用</string>
+    <string name="sim_status_6">SIM1 和 SIM2 ：可用 </string>
     <string name="sd_card_space">"SD 卡容量"</string>
     <string name="sd_card_space1">"SD 卡可用空间"</string>
+    <string name="colligate_illustration">按键调节音量</string>
     <!-- wlan for cta test -->
     <string name="wlan_data_rate">Data Rate</string>
     <string name="wlan_channel">Channel</string>
@@ -51,9 +54,10 @@
     <string name="wlan_wl_success">"WL 操作成功"</string>
     <string name="wlan_wl_fail">"WL 操作失败"</string>	
     <!-- back light -->
-    <string name="backlight_illustration">"请在屏幕变暗后按Power键测试手机睡眠/唤醒"</string>    
+    <string name="backlight_illustration">"请在屏幕变暗后按Power键测试机器睡眠/唤醒"</string>
     <!-- camera -->
     <string name="camera_illustration">"请选择相机的测试结果"</string>
+    <string name="camera_retake">"重新拍照"</string>
     <!-- CameraBack -->
     <string name="cameraback_name">CameraBack</string>
     <string name="cameraback_takepicture">拍照</string>
@@ -78,8 +82,8 @@
     <string name="transmitter_receiver_name">Transmitter and Receiver</string>
     <string name="transmitter_receiver_hint">Transmitter and Receiver</string>
     <string name="transmitter_receiver_recording">现在开始录音, 请对准麦克说话，然后点击stop键</string>
-    <string name="transmitter_receiver_recording1">请对准手机上方副麦克大声说话，并测试是否可以从扬声器听到声音</string>
-    <string name="transmitter_receiver_recording2">请对准手机下方主麦克大声说话，并测试是否可以从听筒收听到声音</string>
+    <string name="transmitter_receiver_recording1">请对准机器上方副麦克大声说话，并测试是否可以从扬声器听到声音</string>
+    <string name="transmitter_receiver_recording2">请对准机器下方主麦克大声说话，并测试是否可以从听筒收听到声音</string>
     <string name="transmitter_receiver_recording3">请对准耳机麦克说话，并测试是否可以从耳机听筒收听到声音</string>
     <string name="transmitter_receiver_playing">录音正在播放....</string>
     <string name="transmitter_receiver_confirm">请问您是否听到声音?</string>
@@ -153,7 +157,7 @@
     <string name="touch_illustration1">"如果触屏有问题可以按 返回键 退出该界面"</string>
     <string name="touch_illustration2">"请选择PASS或FAIL"</string>
     <!-- motion sensor -->
-    <string name="motion_sensor_calibration_illustration">"本测试项目，用于重力传感器校准！请将手机平放在水平平面上然后点击校准按钮,校准开始后不要重复点击校准按钮，或者点击PASS/FAIL按钮，弹出校准结果提示后，根据校准结果点击PASS/FAIL退出测试!"</string>
+    <string name="motion_sensor_calibration_illustration">"本测试项目，用于重力传感器校准！请将机器平放在水平平面上然后点击校准按钮,校准开始后不要重复点击校准按钮，或者点击PASS/FAIL按钮，弹出校准结果提示后，根据校准结果点击PASS/FAIL退出测试!"</string>
     <string name="str_calibration">"校准"</string>
     <string name="str_calibration_success">"校准成功"</string>
     <string name="str_calibration_failed">"校准失败"</string>
@@ -191,6 +195,9 @@
     <string name="wifi_state_unknown">WIFI状态未知，请重试。</string>
     <!-- BlueTooth -->
     <string name="bluetooth_setingpage">"请选择BlueTooth测试结果"</string>
+    <string name="bluetooth_mac_address">"MAC地址:"</string>
+    <string name="bluetooth_scanning">正在查找...</string>
+    <string name="bluetooth_finished">查找完成</string>
     <string name="bluetooth_name">Bluetooth</string>
     <string name="bluetooth_scan_start">正在扫描设备...</string>
     <string name="bluetooth_scan_finish">扫描完成</string>
@@ -200,20 +207,24 @@
     <string name="cancel">取消</string>
     <!-- Version -->
     <string name="cit_info_default">未知</string>
-    <string name="sn_model">型号</string>
-    <string name="software_title">内部版本</string>
-    <string name="hardware_title">硬件版本</string>
-    <string name="baseband_version">基带版本</string>
-    <string name="sn_version">SN号</string>
+    <string name="sn_model">型号:</string>
+    <string name="software_title">内部版本:</string>
+    <string name="hardware_title">硬件版本:</string>
+    <string name="baseband_version">基带版本:</string>
+    <string name="sn_version">SN号:</string>
     <string name="internal_version">"内部版本号"</string>
-    <string name="software_version">软件版本</string>
+    <string name="software_version">软件版本:</string>
     <string name="bt_ft_result">"BT/FT是否pass信息"</string>
-    <string name="tp_type">"TP厂家信息"</string>
-    <string name="lcd_type">"LCD厂家信息"</string>
+    <string name="tp_type">"触摸屏厂家信息"</string>
+    <string name="lcd_type">"显示屏厂家信息"</string>
+    <string name="battery_vendor">电池厂家信息</string>
+    <string name="motion_sensor_vendor">重力传感器厂家信息</string>
+    <string name="proximity_sensor_vendor">距离传感器厂家信息</string>
+    <string name="light_sensor_vendor">光线传感器厂家信息</string>
     <!--Modify for add front camera information by lizhaobo 20151120 start-->
-    <string name="camera_type">"后置Camera厂家信息"</string>
+    <string name="camera_type">"后置摄像头厂家信息"</string>
     <string name="rom_type">"ROM厂家信息"</string>
-    <string name="front_camera_type">"前置Camera厂家信息"</string>
+    <string name="front_camera_type">"前置摄像头厂家信息"</string>
     <!--Modify for add front camera information by lizhaobo 20151120 end-->
 
     <!--  bt&ft-->
@@ -271,7 +282,7 @@
     <string name="service_get_fail">服务获取失败!</string>
     <string name="sensor_get_fail">传感器获取失败!</string>
     <string name="sensor_register_fail">传感器注册失败!</string>
-    <string name="shake_hint_other_sensor">请旋转手机.</string>
+    <string name="shake_hint_other_sensor">请旋转机器.</string>
     <string name="test_pass">测试成功</string>
     <!-- Vibrate -->
     <string name="vibrate_hint">请观察震动是否正常</string>

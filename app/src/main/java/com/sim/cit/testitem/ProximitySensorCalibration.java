@@ -78,7 +78,7 @@ public class ProximitySensorCalibration extends TestActivity implements
     public int time2 = 5;
     int type = 0;
     //modify for prevent repeat set Psensor value by songguangyu 20131211 start
- //   private static QcNvItems mNv;
+//    private static QcNvItems mNv;
     private static final int SET_P_SENSOR = 122;
     private static int[] value;
     private static boolean setFinish;
@@ -131,7 +131,7 @@ public class ProximitySensorCalibration extends TestActivity implements
         context = getApplicationContext();
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         //modify for prevent repeat set Psensor value by songguangyu 20131211 start
-     //   mNv = new QcNvItems(getApplicationContext());
+//        mNv = new QcNvItems(getApplicationContext());
         setFinish = false;
         //modify for prevent repeat set Psensor value by songguangyu 20131211 end
 
@@ -183,7 +183,9 @@ public class ProximitySensorCalibration extends TestActivity implements
     public void onClick(View v) {
         int rv;
         int result = 0;
+        Log.i("proximity", "calibration --- start");
         result = SensorCalibration.doCalibration("proximity");
+        Log.i("proximity", "result ----- " + result);
         Log.d(TAG,"proximity sensor calibrattion result: " + result);
 
         if (result == 0) {

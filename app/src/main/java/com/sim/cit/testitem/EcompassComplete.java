@@ -142,7 +142,7 @@ public class EcompassComplete extends TestActivity {
             mPath.close();
 
             mPaint.setAntiAlias(true);
-            mPaint.setColor(Color.WHITE);
+            mPaint.setColor(Color.BLACK);
             mPaint.setStyle(Paint.Style.FILL);
         }
 

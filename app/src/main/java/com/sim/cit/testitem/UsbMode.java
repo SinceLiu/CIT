@@ -113,7 +113,7 @@ public class UsbMode extends Activity {
                 but_portOff.setChecked(false);
                 //add for port switch by songguangyu 20140429 start
                 function = MASS;
-                mUsbManager.setCurrentFunction(function, true);
+                mUsbManager.setCurrentFunction(function/*, true*/);
                 //add for port switch by songguangyu 20140429 end
             }
         });
@@ -133,7 +133,7 @@ public class UsbMode extends Activity {
                 //tv_curState.setText(SystemProperties.get("sys.usb.config", "000"));
                 but_portOn.setChecked(false);
                 but_portOff.setChecked(true);
-                mUsbManager.setCurrentFunction(function, true);
+                mUsbManager.setCurrentFunction(function/*, true*/);
                 //modify for port switch by songguangyu 20140429 end
             }
         });

@@ -76,7 +76,7 @@ public class NFC extends TestActivity {
         // get the default NFC controller
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter == null) {
-            promt.setText("The device does not support NFC！");
+            promt.setText("The device does not support NFC锛�");
         }
         mContext = this;
         btnPass = super.btnPass;
@@ -93,7 +93,7 @@ public class NFC extends TestActivity {
             nfcIntent.setAction(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED);
             nfcIntent.putExtra(NfcAdapter.EXTRA_ADAPTER_STATE,NfcAdapter.STATE_ON);
             sendBroadcast(nfcIntent);
-            promt.setText("please start the function of NFC in setting！");*/
+            promt.setText("please start the function of NFC in setting锛�");*/
         //    finish();
         //    return;
         // Modify for move the intent-filter of NFC tag action to NFC test in CIT by xiasiping 20141112 start
@@ -103,6 +103,7 @@ public class NFC extends TestActivity {
         // Modify for move the intent-filter of NFC tag action to NFC test in CIT by xiasiping 20141112 end
         if(!nfcAdapter.isEnabled()){
             isEnabledSetting = false;
+            Log.i(TAG, "------------------nfcAdapter.enable() = "+nfcAdapter.enable());
             if(nfcAdapter.enable()){
                 new Thread() {
                     public void run() {
@@ -110,16 +111,19 @@ public class NFC extends TestActivity {
                             //Modify for fix bug 7364 that the NFC is enable and sometimes is disable by lvhongshan 20140127 start
                             int i = 0;
                             Thread.sleep(2000);
+                            Log.i(TAG, "------------------is nfc ON ? "+(nfcAdapter.getAdapterState() == NfcAdapter.STATE_TURNING_ON));
                             while((nfcAdapter.getAdapterState() == NfcAdapter.STATE_TURNING_ON) && i < 10){
                                 i ++;
                                 Thread.sleep(2000);
                             }
                             //Modify for fix bug 7364 that the NFC is enable and sometimes is disable by lvhongshan 20140127 end
                             if(nfcAdapter.enableNdefPush()){
+                            	Log.i(TAG, "------------------enableNdefPush");
                                 Message message = new Message();
                                 message.what = ENABLE;
                                 mnfcHandler.sendMessage(message);
                             } else {
+                            	Log.i(TAG, "------------------enableNdefPush flase");
                                 promt.setText(R.string.nfc_disable);
                                 btnPass.setEnabled(false);
                             }
@@ -129,6 +133,7 @@ public class NFC extends TestActivity {
                     }
                 }.start();
             } else {
+            	Log.i(TAG, "------------------nfcAdapter disable");
                 promt.setText(R.string.nfc_disable);
                 btnPass.setEnabled(false);
                 isCIT = false;
@@ -138,11 +143,12 @@ public class NFC extends TestActivity {
             message.what = ENABLE;
             mnfcHandler.sendMessage(message);
         } else {
+        	Log.i(TAG, "------------------nfcAdapter other disable");
             promt.setText(R.string.nfc_disable);
             btnPass.setEnabled(false);
         }
         //}else {
-        //    promt.setText("The NFC is enable！");
+        //    promt.setText("The NFC is enable锛�");
         //    btnPass.setEnabled(true);
         //}
         //obtain the ACTION_TECH_DISCOVERED

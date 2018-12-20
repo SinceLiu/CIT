@@ -1,5 +1,6 @@
 package com.sim.cit.testitem;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import com.sim.cit.R;
 import com.sim.cit.TestActivity;
 
 import android.app.ProgressDialog;
-import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -39,8 +39,8 @@ public class Wlan extends TestActivity implements OnClickListener{
     private boolean is5g = false;
     private TextView text_wifi_24g;
     private TextView text_wifi_5g;
-    private final int START_SCAN_WLAN = 123;
-    private final int GET_SCAN_RESULTS = 124;
+    private static final int START_SCAN_WLAN = 123;
+    private static final int GET_SCAN_RESULTS = 124;
     private TextView text_wifi_info;
     private Button passButton;
     private boolean isExit = false;
@@ -50,35 +50,37 @@ public class Wlan extends TestActivity implements OnClickListener{
 
     //add by hwj20170422
     private ListView mWifiListView;
-    
+
     private WifiAdapter mAdapter;
-    
-    
-    
-    
+    private MyHandler mHandler;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         layoutId = R.layout.wifiseting_page;
         super.onCreate(savedInstanceState);
         application = (CITTestHelper) getApplication();
+        mHandler = new MyHandler(this);
         passButton = (Button) findViewById(R.id.btn_pass);
         passButton.setEnabled(false);
-        wm = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        wm = (WifiManager)application.getSystemService(Context.WIFI_SERVICE);
         discovery_wifipoint_button=(Button)findViewById(R.id.btn_discovery_wifipoint);
         discovery_wifipoint_button.setOnClickListener(this);
         discovery_wifipoint_button.setText("Search ConnectPoints");
         text_wifi_24g=(TextView) findViewById(R.id.tv_wifi_24g);
         text_wifi_5g=(TextView) findViewById(R.id.tv_wifi_5g);
-        
-        
+
+
         //add by hwj20170422
         mWifiListView = (ListView) findViewById(R.id.wifi_list);
         text_wifi_24g.setVisibility(View.GONE);
         text_wifi_5g.setVisibility(View.GONE);
-        
+
         mAdapter = new WifiAdapter();
         mWifiListView.setAdapter(mAdapter);
-        
+
         //text_wifi_info=(TextView) findViewById(R.id.tv_wifi_info);
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setIndeterminate(true);
@@ -141,11 +143,11 @@ public class Wlan extends TestActivity implements OnClickListener{
             }
             if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.endsWith(action)) {
                 scanResults=wm.getScanResults();
-                
+
                 //add by hwj20170422
                 sortByLevel(scanResults);
                 mAdapter.notifyDataSetChanged();
-                
+
                 mHandler.removeMessages(GET_SCAN_RESULTS);
                 mHandler.sendMessage(mHandler.obtainMessage(GET_SCAN_RESULTS));
                 discovery_wifipoint_button.setText("Search ConnectPoints");
@@ -153,6 +155,13 @@ public class Wlan extends TestActivity implements OnClickListener{
             }
         }
     };
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        isExit = false;
+    }
+
 	@Override
 	protected void onPause() {
         isExit = true;
@@ -163,56 +172,64 @@ public class Wlan extends TestActivity implements OnClickListener{
 		super.onPause();
 	}
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (wm.isWifiEnabled()) {
-            wm.setWifiEnabled(false);
-            Log.i("progress", "onDestroy_WifiManager.setWifiEnabled(false)");
-        }
+//        if (wm.isWifiEnabled()) {
+//            wm.setWifiEnabled(false);
+//            Log.i("progress", "onDestroy_WifiManager.setWifiEnabled(false)");
+//        }
         unregisterReceiver(wifiReceiver);
+        mAdapter = null;
+        mHandler.removeCallbacksAndMessages(null);  //把消息对象从消息队列移除
     }
 
-    private Handler mHandler = new Handler() {
+    private static class MyHandler extends Handler{
+        private WeakReference<Wlan> reference;
+        public MyHandler(Wlan activity) {
+            reference = new WeakReference<Wlan>(activity);//这里传入activity的上下文
+        }
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            Wlan wlanActivity = reference.get();
             switch (msg.what) {
                 case START_SCAN_WLAN:
-                    if (isExit) {
+                    if (wlanActivity.isExit) {
                         break;
                     }
 //                    if ((!mProgressDialog.isShowing()) && (!isExit) && (!stopScan)) {
 //                        mProgressDialog.show();
 //                    }
-                    wm.startScan();
-                    sendEmptyMessageDelayed(START_SCAN_WLAN, 10 * 1000);
+                    wlanActivity.wm.startScan();
+                    sendEmptyMessageDelayed(wlanActivity.START_SCAN_WLAN, 10 * 1000);
                     break;
                 case GET_SCAN_RESULTS:
-                    if (isExit) {
+                    if (wlanActivity.isExit) {
                         break;
                     }
-                    int size = scanResults.size();
+                    int size = wlanActivity.scanResults.size();
                     if (size > 0) {
                     /*text_wifi_info.setText(getString(R.string.wifisettins_page)+"\n"+
                     scanResults.get(0).toString()
                     );*/
-                    for (ScanResult sc : scanResults) {
+                    for (ScanResult sc : wlanActivity.scanResults) {
 //                        if (sc.is5GHz()) {
-                            is5g = true;
-                            text_wifi_5g.setText(getString(R.string.wifisettins_5g) + "" + sc.SSID);
+                            wlanActivity.is5g = true;
+                            wlanActivity.text_wifi_5g.setText(wlanActivity.getString(R.string.wifisettins_5g) + "" + sc.SSID);
 //                        }
 //                        if (sc.is24GHz()) {
-                            is24g = true;
-                            text_wifi_24g.setText(getString(R.string.wifisettins_24g) + "" + sc.SSID);
+                            wlanActivity.is24g = true;
+                            wlanActivity.text_wifi_24g.setText(wlanActivity.getString(R.string.wifisettins_24g) + "" + sc.SSID);
 //                        }
                     }
-                    Log.i("cit_wifi", "is 5g :[" + is5g + "] and is 2.4g :[" + is24g + "]");
-                    if (is5g && is24g) {
-                        stopScan = true;
-                        passButton.setEnabled(true);
-                        if (mProgressDialog.isShowing()) {
-                            mProgressDialog.dismiss();
+                    Log.i("cit_wifi", "is 5g :[" + wlanActivity.is5g + "] and is 2.4g :[" + wlanActivity.is24g + "]");
+                    if (wlanActivity.is5g && wlanActivity.is24g) {
+                        wlanActivity.stopScan = true;
+                        wlanActivity.passButton.setEnabled(true);
+                        if (wlanActivity.mProgressDialog.isShowing()) {
+                            wlanActivity.mProgressDialog.dismiss();
                         }
                     }
                 }
@@ -236,7 +253,7 @@ public class Wlan extends TestActivity implements OnClickListener{
             mHandler.sendMessage(mHandler.obtainMessage(START_SCAN_WLAN));
         }
     }
-    
+
     private class WifiAdapter extends BaseAdapter{
 
 		@Override
@@ -267,7 +284,6 @@ public class Wlan extends TestActivity implements OnClickListener{
             }else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
             ScanResult result = scanResults.get(position);
             if (result != null) {
                 Log.v("Wlan", "position = " + position + "-----wifi name is " + result.SSID);

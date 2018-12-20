@@ -305,7 +305,7 @@ public class MotionSensorCalibration extends TestActivity {
             switch(msg.what){
             case SET_G_SENSOR:
                 try {
-                 //   mNv.set_g_sensor(val_x, val_y, val_z);
+//                    mNv.set_g_sensor(val_x, val_y, val_z);
                     strSuccess = getString(R.string.str_calibration_success);
                     btnPass.setEnabled(true);
                     Toast.makeText(context, strSuccess, 1500).show();

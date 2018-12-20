@@ -42,10 +42,10 @@
 			<testitem title="Keypad" className="Keypad" isSet="1"/>
 		</cit1>
 		<cit2>
-			<testitem title="Motion Sensor Calibration" className="MotionSensorCalibration" isSet="0"/>
+			<testitem title="Motion Sensor Calibration" className="MotionSensorCalibration" isSet="1"/>
 			<testitem title="Motion Sensor" className="MotionSensor" isSet="1"/>
 			<testitem title="Ecompass" className="EcompassComplete" isSet="0"/>
-			<testitem title="Proximity Sensor Calibration" className="ProximitySensorCalibration" isSet="0"/>
+			<testitem title="Proximity Sensor Calibration" className="ProximitySensorCalibration" isSet="1"/>
 			<testitem title="Proximity Sensor" className="ProximitySensor" isSet="1"/>
 			<testitem title="Light Sensor" className="LightSensor" isSet="0"/>
 		</cit2>

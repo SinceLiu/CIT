@@ -2,11 +2,20 @@ package com.sim.cit.testitem;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
@@ -36,6 +45,11 @@ public class FrontCamera extends TestActivity {
     private List<XNode> xNodes;
     private String camera = null;
     //Modify for CIT optimization by xiasiping 20140730 end
+    //Modify for show result by custom view by lxx 20180827
+    private Button retake;
+    private ImageView photo;
+    private File file;
+    private Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Modify for CIT optimization by xiasiping 20140730 start
@@ -58,14 +72,24 @@ public class FrontCamera extends TestActivity {
         }
         //Modify for CIT optimization by xiasiping 20140730 end
 
-        layoutId = R.layout.one_txt;
+        layoutId = R.layout.custom_camera;
         super.onCreate(savedInstanceState);
         if (CITTestHelper.HAS_FLASH_LIGHT) {
 //          CommonDrive.flashlightControl("1");
         }
 
-        txtMsg = (TextView)findViewById(R.id.txt_one);
-        txtMsg.setText(R.string.camera_illustration);
+//        txtMsg = (TextView)findViewById(R.id.txt_one);
+//        txtMsg.setText(R.string.camera_illustration);
+
+        //Modify for show result by custom view by lxx 20180827
+        photo = (ImageView)findViewById(R.id.photo);
+        retake = (Button)findViewById(R.id.btn_retake);
+        retake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraTest(false);
+            }
+        });
 
 /*        try {
             //Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
@@ -101,7 +125,7 @@ public class FrontCamera extends TestActivity {
         Log.i(TAG, "*****cameraTest  BEGIN*****");
         try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (b) {
                 intent.putExtra("aging_test_camera", "rear");
                 intent.putExtra("withouthud", true);
@@ -117,8 +141,16 @@ public class FrontCamera extends TestActivity {
             int cameraId = getCameraId(false);
 //            intent.putExtra("camerasensortype", cameraId);
             intent.putExtra("android.intent.extras.CAMERA_FACING", cameraId);
-            
-            startActivity(intent);
+
+        //自定义View显示拍照照片，Q9相机预览相片不清晰（压缩过）
+            file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + ".jpg");
+            Uri imageUri = Uri.fromFile(file);
+            //指定照片保存路径，image.jpg为一个临时文件，每次拍照后这个图片都会被替换
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+            intent.putExtra("android.intent.extra.quickCapture", true);  //不预览图片
+            startActivityForResult(intent, 1);
+
         } catch (ActivityNotFoundException e) {
             Log.d(TAG, "the camera activity is not exist");
             e.printStackTrace();
@@ -128,6 +160,13 @@ public class FrontCamera extends TestActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(bitmap!=null){
+            bitmap.recycle();
+            bitmap = null;
+        }
+        if(file.exists()&&file.isFile()){ //删除照片
+            file.delete();
+        }
         if (CITTestHelper.HAS_FLASH_LIGHT) {
 //            CommonDrive.flashlightControl("0");
         }
@@ -153,4 +192,36 @@ public class FrontCamera extends TestActivity {
         }
         return -11111;
 	}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("BackCamera", "onResult");
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("BackCamera", "---------" + Uri.fromFile(file));
+        bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        if(bitmap!=null){
+            if (bitmap.getWidth() > bitmap.getHeight()) {
+                photo.setImageBitmap(rotatePhotos(bitmap));
+            } else {
+                photo.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+    //将图片旋转90°
+    public static Bitmap rotatePhotos(Bitmap bitmap) {
+        if (bitmap != null) {
+            Matrix m = new Matrix();
+            try {
+                m.setRotate(90, bitmap.getWidth() / 2, bitmap.getHeight() / 2);//90就是我们需要选择的90度
+                Bitmap bmp2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+                bitmap.recycle();
+                bitmap = bmp2;
+            } catch (Exception ex) {
+                Log.e("BackCamera", "旋转图片创建失败");
+            }
+        }
+        return bitmap;
+
+    }
 }

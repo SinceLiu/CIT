@@ -1,8 +1,5 @@
 package com.sim.cit.testitem;
 
-import java.io.File;
-
-import android.app.Service;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -13,9 +10,10 @@ import android.os.StatFs;
 import android.os.Vibrator;
 //import android.telephony.MSimTelephonyManager;
 import android.telephony.TelephonyManager;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,18 +21,18 @@ import com.sim.cit.CITTestHelper;
 import com.sim.cit.CommonDrive;
 import com.sim.cit.R;
 import com.sim.cit.TestActivity;
-import android.os.storage.StorageManager;
 //add by liyunlong start
 import android.os.IBinder;
-import android.os.Handler;
 import com.android.internal.app.IMediaContainerService;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import java.io.BufferedReader;
 //add by liyunlong end
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,10 +40,10 @@ import java.util.TimerTask;
 import android.os.Vibrator;
 //Modify for use vibrator api by lizhaobo 20151111 end
 
-public class Colligate extends TestActivity {
+public class Colligate extends TestActivity implements OnClickListener{
 private static final String TAG = "CIT_ColligateTest";
 
-//    private TextView tvSim;
+    private TextView tvSim;
     private TextView tvSD;
     private Button btnPass;
     private Vibrator vibrator;
@@ -69,17 +67,23 @@ private static final String TAG = "CIT_ColligateTest";
     private boolean hasVibrator = true;
     private Vibrator v;
     //Modify for use vibrator api by lizhaobo 20151111 end
+    private Button noDizuo;  //隐藏无底座测试
+    private CITTestHelper application;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         layoutId = R.layout.two_txt;
         super.onCreate(savedInstanceState);
         mStorageManager = StorageManager.from(this);
-//        tvSim = (TextView)findViewById(R.id.txt_one);
+        tvSim = (TextView)findViewById(R.id.txt_one);
         tvSD = (TextView)findViewById(R.id.txt_two);
+
+
+        View labaView = findViewById(R.id.laba);
+        labaView.setVisibility(View.VISIBLE);
         btnPass = super.btnPass;
-//        Intent service = new Intent().setComponent(DEFAULT_CONTAINER_COMPONENT);
-//        bindService(service, mDefContainerConn, Context.BIND_AUTO_CREATE);
+        Intent service=new Intent().setComponent(DEFAULT_CONTAINER_COMPONENT);
+    	bindService(service, mDefContainerConn, Context.BIND_AUTO_CREATE);
         try {
             //Modify for use vibrator api by lizhaobo 20151111 start
             if (hasVibrator) {
@@ -97,12 +101,15 @@ private static final String TAG = "CIT_ColligateTest";
         //Modify for use vibrator api by lizhaobo 20151111 end
     }
 
-    private void startSpeaker(){
+    private void startSpeaker(int switchValues){
         Log.i(TAG, "speaker start");
-        am = (AudioManager) getSystemService(AUDIO_SERVICE);
+		am = (AudioManager) getSystemService(AUDIO_SERVICE);
         nMaxMusicVolume = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int state = switchValues == 0 ? switchValues : 1;
+        am.setParameters("spk_out_status="+state);
+  	    am.setSpeakerphoneOn(state == 1);
         nCurrentMusicVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC);
-        Log.i(TAG, "speaker nCurrentMusicVolume " + nCurrentMusicVolume+ " nMaxMusicVolume " + nMaxMusicVolume);
+        Log.i(TAG, "speaker nCurrentMusicVolume " + nCurrentMusicVolume + " nMaxMusicVolume " + nMaxMusicVolume);
         am.setStreamVolume(AudioManager.STREAM_MUSIC, nCurrentMusicVolume, 0);
         Uri uri = Uri.parse(CITTestHelper.COLLIGATE_SOUND_PATH);
         /*20130122 modify for change sdcard path by lvhongshan start*/
@@ -124,6 +131,12 @@ private static final String TAG = "CIT_ColligateTest";
 //        if (sdIsPass) {
 //            mp = MediaPlayer.create(getApplicationContext(), uri);
 //        } else {
+        if(mp != null)
+        {
+        	mp.stop();
+        	mp.release();
+        	mp = null;
+        }
             mp = MediaPlayer.create(getApplicationContext(), R.raw.test);
 //        }
         if (mp != null) {
@@ -149,8 +162,8 @@ private static final String TAG = "CIT_ColligateTest";
 
 
         TelephonyManager tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        nSimStatus = tm.getSimState();
-        nSim2Status = tm.getSimState();
+        nSimStatus = tm.getSimState(0);
+        nSim2Status = tm.getSimState(1);
 
         switch (nSimStatus) {
         case TelephonyManager.SIM_STATE_UNKNOWN:
@@ -215,10 +228,10 @@ private static final String TAG = "CIT_ColligateTest";
         Log.i(TAG, "SIM card status: " + strStatus);
         if (simIsPass && sim2IsPass) {
             simIsPass = true;
-//            tvSim.setText("SIM card1 and SIM card2:\tPass");
+            tvSim.setText(getString(R.string.sim_status_6));
         }else{
             simIsPass = false;
-//            tvSim.setText("SIM1 status:"+strStatus+"\n"+"SIM2 status:"+strStatus2);
+            tvSim.setText("SIM1 :"+strStatus+"\n"+"SIM2 :"+strStatus2);
             Toast.makeText(this, "SIM card status: " + strStatus, 2000).show();
             Toast.makeText(this, "SIM card2 status: " + strStatus2, 2000).show();
         }
@@ -279,6 +292,22 @@ private static final String TAG = "CIT_ColligateTest";
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        tvSD.setText(getString(R.string.colligate_illustration));
+
+//        getSimStatus();
+        // getSDStatus();
+//        startSpeaker(0);
+
+//        if (CITTestHelper.HAS_LED) {
+//            startLed();
+//    }
+        //Log.i(TAG, "sdIsPass : " + sdIsPass +"simIsPass"+simIsPass);
+//        btnPass.setEnabled(simIsPass);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         isTest=false;
@@ -289,23 +318,16 @@ private static final String TAG = "CIT_ColligateTest";
         if (mp != null) {
             mp.stop();
             mp.release();
+            mp = null;
         }
         if (am != null) {
+            nCurrentMusicVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); //获取最新音量（滑动调节？)
             am.setStreamVolume(AudioManager.STREAM_MUSIC, nCurrentMusicVolume, 0);
         }
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        getSimStatus();
-       // getSDStatus();
-        startSpeaker();
-
-//        if (CITTestHelper.HAS_LED) {
-//            startLed();
-//    }
-        //Log.i(TAG, "sdIsPass : " + sdIsPass +"simIsPass"+simIsPass);
-        btnPass.setEnabled(true);
+        if(am.isSpeakerphoneOn()) {    //Q9
+		 	am.setParameters("spk_out_status="+ 0);
+            am.setSpeakerphoneOn(false);
+        }
     }
 
 //add by liyunlong start
@@ -393,11 +415,12 @@ private static final String TAG = "CIT_ColligateTest";
             android.util.Log.e("xsp_vibrator_test", "IOException when close vibrator_file : " + ioe_f.toString());
         }
         super.onDestroy();
-//        unbindService(mDefContainerConn);
+        unbindService(mDefContainerConn);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        nCurrentMusicVolume = am.getStreamVolume(AudioManager.STREAM_MUSIC); //获取最新音量
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (nCurrentMusicVolume < nMaxMusicVolume)
@@ -416,5 +439,77 @@ private static final String TAG = "CIT_ColligateTest";
         }
         return super.onKeyDown(keyCode,event);
     }
+	
+	 @Override
+    	public void onClick(View v) {
+    		// TODO Auto-generated method stub
+    		switch (v.getId()) {
+				case R.id.jishen:
+                    if(mp != null)
+                    {
+                        mp.stop();
+                        mp.release();
+                        mp = null;
+                    }
+					startSpeaker(0);
+					break;
+	
+				case R.id.dizuo:
+                    if(mp != null)
+                    {
+                        mp.stop();
+                        mp.release();
+                        mp = null;
+                    }
+					if(get_ext_speaker_type() == 1){
+						startSpeaker(1);
+					}else{
+						//toast no
+						Toast.makeText(Colligate.this, "请先插入底座", Toast.LENGTH_SHORT).show();
+					}
+					break;
+				case R.id.nodizuo:
+                    if(mp != null)
+                    {
+                        mp.stop();
+                        mp.release();
+                        mp = null;
+                    }
+					startSpeaker(1);
+					break;
+			}
+    	}
+    
+    /**
+     * 0机身，1底座
+     * @return
+     */
+    private int get_ext_speaker_type()
+	{
+		int gpio_value = -1;
+		String str1 = "/proc/readboy/speaker_type";
+		String str2 = null;
+		try {
+			FileReader localFileReader = new FileReader(str1);
+			BufferedReader localBufferedReader = new BufferedReader(
+					localFileReader, 300);
+			str2 = localBufferedReader.readLine();
+			if(null != str2) {
+				gpio_value = Integer.parseInt(str2);
+			}
+			localBufferedReader.close();
+			localFileReader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NumberFormatException e){
+			e.printStackTrace();
+		}
+		Log.d(TAG, "read = " + str2 + ",gpio_value = " + gpio_value);
+		
+		return gpio_value;
+	}
+
+
+
 
 }

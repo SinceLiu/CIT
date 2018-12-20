@@ -10,77 +10,103 @@
         android:layout_weight="9"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            >
 
             <TextView
                 android:id="@+id/t1"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sn_model"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t2"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp" />
+                android:layout_toEndOf="@+id/t1"
+                android:layout_marginStart="10dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t9"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/sn_version"
-                android:textSize="30sp"/>
+                android:layout_below="@id/t2"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/t10"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"/>
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_below="@id/t2"
+                android:layout_toEndOf="@id/t9"
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/t3"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/software_title"
-                android:textSize="30sp" />
+                android:layout_below="@id/t10"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t4"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"/>
+                android:layout_below="@id/t10"
+                android:layout_toEndOf="@id/t3"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/t5"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hardware_title"
-                android:textSize="30sp" />
+                android:layout_below="@id/t4"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t6"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
+                android:layout_below="@id/t4"
+                android:layout_toEndOf="@id/t5"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp"
                 android:text="@string/hardware_content"
                  />
 
             <TextView
                 android:id="@+id/t7"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/t6"
+                android:layout_marginTop="10dp"
                 android:text="@string/baseband_version"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t8"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp" />
+                android:layout_below="@id/t6"
+                android:layout_toEndOf="@id/t7"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
 
             <!-- 20130121-modify for add encryption sn test by lvhongshan start -->
             <!--
@@ -94,114 +120,179 @@
 
             <TextView
                 android:id="@+id/t11"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/software_version"
-                android:textSize="30sp"/>
+                android:layout_below="@+id/t8"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/t12"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp" />
+                android:layout_below="@id/t8"
+                android:layout_toEndOf="@id/t11"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
 
             <!-- modify for read the auto test results to NV2499 by songguangyu 20140218 start -->
 
             <TextView
                 android:id="@+id/t13"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp" />
+                android:layout_below="@+id/t12"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t14"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp" />
+                android:layout_below="@id/t13"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t15"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp" />
+                android:layout_below="@id/t14"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t16"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp" />
+                android:layout_below="@id/t15"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t17"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"/>
+                android:layout_below="@id/t16"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/t18"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp" />
+                android:layout_below="@id/t17"
+                android:layout_marginTop="10dp"
+                android:textSize="25sp" />
             <!-- modify for read the auto test results to NV2499 by songguangyu 20140218 end -->
             <!-- add PA568list item by xiasiping 20140811 start -->
 
             <TextView
                 android:id="@+id/t19"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/t18"
+                android:layout_marginTop="10dp"
                 android:text="@string/imei"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t20"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/t19"
+                android:layout_marginTop="10dp"
                 android:text="@string/imei"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
             <!-- add PA568list item by xiasiping 20140811 end -->
 
             <TextView
                 android:id="@+id/t21"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/t20"
+                android:layout_marginTop="10dp"
                 android:text="@string/tp_type"
-                android:textSize="30sp"/>
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/t22"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/t21"
+                android:layout_marginTop="10dp"
                 android:text="@string/lcd_type"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
             <!-- Modify for add front camera information by lizhaobo 20151120 start -->
 
             <TextView
                 android:id="@+id/t23"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/t22"
+                android:layout_marginTop="10dp"
                 android:text="@string/front_camera_type"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/t24"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/t23"
+                android:layout_marginTop="10dp"
                 android:text="@string/camera_type"
-                android:textSize="30sp"/>
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/t25"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/t24"
+                android:layout_marginTop="10dp"
                 android:text="@string/rom_type"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
+            <TextView
+                android:id="@+id/t26"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/t25"
+                android:layout_marginTop="10dp"
+                android:text="@string/battery_vendor"
+                android:textSize="25sp" />
+
+            <TextView
+                android:id="@+id/t27"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/t26"
+                android:layout_marginTop="10dp"
+                android:text="@string/motion_sensor_vendor"
+                android:textSize="25sp" />
+            <TextView
+                android:id="@+id/t28"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/t27"
+                android:layout_marginTop="10dp"
+                android:text="@string/proximity_sensor_vendor"
+                android:textSize="25sp" />
+            <TextView
+                android:id="@+id/t29"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/t28"
+                android:layout_marginTop="10dp"
+                android:text="@string/light_sensor_vendor"
+                android:textSize="25sp" />
             <!-- Modify for add front camera information by lizhaobo 20151120 end -->
             <!--
             <TextView android:id="@+id/t22" android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:textSize="14dip" />
             -->
 
-        </LinearLayout>
+        </RelativeLayout>
     </ScrollView>
 
     <LinearLayout

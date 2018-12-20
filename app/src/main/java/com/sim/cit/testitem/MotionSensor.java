@@ -146,21 +146,18 @@ public class MotionSensor extends TestActivity {
 
 			int nNewArrow = 0;
 			int nDirect = GetDirection(-(int) mValues[0], -(int) mValues[1]);
+
 			switch (nDirect) {
 			case 1:
-				//right
 				nNewArrow = 1;
 				break;
 			case 2:
-				//down
 				nNewArrow = 2;
 				break;
 			case 3:
-				//left
 				nNewArrow = 3;
 				break;
 			case 4:
-				//up
 				nNewArrow = 4;
 				break;
 			default:

@@ -81,7 +81,7 @@ public class FmManager {
             } else {
                 logd("to enable");
                 FmConfig mFmConfig = getFmDefConfig();
-                ret = mReceiver.enable(mFmConfig);
+                ret = mReceiver.enable(mFmConfig,mContext);
                 if (ret) {
                     mFmOn = true;
                     logd("heare");

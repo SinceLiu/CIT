@@ -1,6 +1,7 @@
 package com.sim.cit.testitem;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class FingerPrintTest extends TestActivity {
         }
     };
 
+    private boolean fpSuc = false;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         layoutId = R.layout.one_txt_one_btn;
@@ -40,8 +43,9 @@ public class FingerPrintTest extends TestActivity {
         context = getApplicationContext();
         tv_Touch = (TextView)findViewById(R.id.txt_one);
         tv_Touch.setText("Please choose the result of FingerPrint");
+        tv_Touch.setText(R.string.fp_touch_key);
         btnPass = super.btnPass;
-        //btnPass.setEnabled(false);
+        btnPass.setEnabled(false);
         i = new Intent("EgisInlineTool");
         btnTest = (Button)findViewById(R.id.btn_one);
         btnTest.setText("ReTest FingerPrint");
@@ -53,11 +57,14 @@ public class FingerPrintTest extends TestActivity {
                 }
             }
         });
+        btnTest.setVisibility(View.GONE);
+        isAllowBack = true;
+        
         /*btnTest.setEnabled(false);
         tp_pass_intentFilter = new IntentFilter();
         tp_pass_intentFilter.addAction("ACTION_TP_PASS");
         context.registerReceiver(mReceiver, tp_pass_intentFilter);*/
-        startActivityForResult(i, requestCode);//Modified by xuyongfeng for fingerprint reuslt on 2016-5-12
+//        startActivityForResult(i, requestCode);//Modified by xuyongfeng for fingerprint reuslt on 2016-5-12
     }
 
 
@@ -76,4 +83,15 @@ public class FingerPrintTest extends TestActivity {
     //Add by xuyongfeng for fingerprint reuslt on 2016-5-12 End
 
 
+	@Override
+	public void onBackPressed() {
+		if(!fpSuc){
+			fpSuc = true;
+			tv_Touch.setText(R.string.fp_identify_suc);
+			btnPass.setEnabled(true);
+		}
+	}
+
+    
+    
 }

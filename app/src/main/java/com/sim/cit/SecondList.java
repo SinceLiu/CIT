@@ -33,11 +33,12 @@ public class SecondList extends ListActivity {
 		super.onCreate(savedInstanceState);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-                //add for mark test results by songguangyu 20140220 start
-                setContentView(R.layout.test_list);
-                //add for mark test results by songguangyu 20140220 end
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,   
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //屏幕常亮,不修改系统休眠时间
+		//add for mark test results by songguangyu 20140220 start
+		setContentView(R.layout.test_list);
+		//add for mark test results by songguangyu 20140220 end
         
         application = (CITTestHelper)getApplication();
         isStartedBySdCard = application.isStartedBySdCard();

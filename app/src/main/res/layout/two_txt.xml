@@ -17,8 +17,46 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
-		android:layout_marginTop="65dip"
+		android:layout_marginTop="80dp"
 		android:textSize="30sp"/>
+	
+	<RelativeLayout 
+	    android:id="@+id/laba"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
+	    android:gravity="center"
+	    android:visibility="gone"
+	    >
+	    <Button 
+	        android:id="@+id/jishen"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/jishen"
+			android:textSize="30sp"
+	        android:onClick="onClick"
+	        />
+	    <Button 
+	        android:id="@+id/dizuo"
+	        android:layout_toRightOf="@id/jishen"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+			android:textSize="30sp"
+	        android:text="@string/dizuo"
+	        android:onClick="onClick"
+			android:layout_marginStart="20dp"
+	        />
+	    <Button 
+	        android:id="@+id/nodizuo"
+	        android:layout_toRightOf="@id/dizuo"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/nodizuo"
+			android:textSize="30sp"
+	        android:onClick="onClick"
+			android:layout_marginStart="20dp"
+	        />
+	</RelativeLayout>
 	
 	<include
 		layout="@layout/pass_fail"

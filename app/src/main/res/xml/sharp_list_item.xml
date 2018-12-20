@@ -98,11 +98,11 @@
 			<testitem title="NFC" className="NFC" isSet="0"/>
 		</cit1>
 		<cit2>
-			<testitem title="Motion Sensor Calibration" className="MotionSensorCalibration" isSet="0"/>
+			<testitem title="Motion Sensor Calibration" className="MotionSensorCalibration" isSet="1"/>
 			<testitem title="Motion Sensor" className="MotionSensor" isSet="1"/>
 			<testitem title="Ecompass" className="EcompassComplete" isSet="0"/>
                         <testitem title="Gyroscope" className="Gyroscope" isSet="0"/>
-			<testitem title="Proximity Sensor Calibration" className="ProximitySensorCalibration" isSet="0"/>
+			<testitem title="Proximity Sensor Calibration" className="ProximitySensorCalibration" isSet="1"/>
 			<testitem title="Proximity Sensor" className="PSensor" isSet="1"/>
 			<testitem title="Ambient Sensor" className="LightSensor" isSet="1"/>
 		</cit2>

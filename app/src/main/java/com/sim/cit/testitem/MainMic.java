@@ -1,5 +1,8 @@
 package com.sim.cit.testitem;
 
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Environment;
 import android.os.SystemClock;
 
@@ -34,7 +37,7 @@ public class MainMic extends TestActivity {
 
     String mAudiofilePath;
     static String TAG = "MainMic";
-    MediaRecorder mMediaRecorder = new MediaRecorder();
+    //MediaRecorder mMediaRecorder = new MediaRecorder();
     boolean isRecording = false;
     Button recordButton = null;
     Button stopButton = null;
@@ -45,81 +48,57 @@ public class MainMic extends TestActivity {
     MediaPlayer mMediaPlayer;
     private boolean isComplete = false;
     //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 end
+    private int alarmVolume;    //add for recover volume by lxx 20180808;
+    private int musicVolume;
+    private int callVolume;
+    private int dtmfVolume;
+    private int notificationVolume;
+    private int ringVolume;
+    private int systemVolume;
+    private HomeKeyBroadCastReceiver mReceiver;
+
+    private Recorder mRecorder;
+    private RemainingTimeCalculator mRemainingTimeCalculator;
+    int mAudioSourceType = MediaRecorder.AudioSource.MIC;
+    static final int BITRATE_AMR =  12800; // bits/sec
+    static final int SAMPLERATE_8000 = 8000;
 
     public void onCreate(Bundle savedInstanceState) {
 
-    	layoutId=R.layout.transmitter_receiver;
-    	super.onCreate(savedInstanceState);
+        layoutId=R.layout.transmitter_receiver;
+        super.onCreate(savedInstanceState);
         mContext = this;
-        isRecording = false;
-        init();
-        getService();
-        bindView();
-        //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 start
-        mMediaPlayer = new MediaPlayer();
-        //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 end
-
-        if (mAudioManager.isWiredHeadsetOn())
-            showWarningDialog(getString(R.string.remove_headset));
-
-        setAudio();
         btnPass.setEnabled(false);
     }
 
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		mRecorder.delete();
-	}
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		mRecorder.delete();
-	}
-
-	private Recorder mRecorder;
-	private RemainingTimeCalculator mRemainingTimeCalculator;
-    int mAudioSourceType = MediaRecorder.AudioSource.MIC;
-	private void init(){
-		mRemainingTimeCalculator = new RemainingTimeCalculator(this);
-		mRecorder = new Recorder();
-	}
-
-	static final int BITRATE_AMR =  12800; // bits/sec
-    static final int SAMPLERATE_8000 = 8000;
-	private void startRecord(String mStoragePath){
-        mRemainingTimeCalculator.reset();
-        mRemainingTimeCalculator.setStoragePath(0);
-        mRecorder.setStoragePath(mStoragePath);
-
-        mRemainingTimeCalculator.setBitRate(BITRATE_AMR);
-        mRecorder.setChannels(1);
-        mRecorder.setSamplingRate(SAMPLERATE_8000);
-        mRecorder.startRecording(MediaRecorder.OutputFormat.RAW_AMR, ".amr", this,
-                                mAudioSourceType, MediaRecorder.AudioEncoder.AMR_NB);
-	}
-	private void stopRecord(){
-        mRecorder.stop();
-	}
-	private void play(){
-        mRecorder.startPlayback();
-	}
     @Override
-    public void finish() {
-        isExit = true;
-        super.finish();
-        //add for click fail button crash when recoding by song 20140506 start
-//        if (isRecording) {
+    public void onResume(){
+        super.onResume();
+        isRecording = false;
+        init();
+        getService();
+        getVolumeBefore();
+        bindView();
+        mReceiver = new HomeKeyBroadCastReceiver();   //监听Home键
+        registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+
+        if (mAudioManager.isWiredHeadsetOn())
+            showWarningDialog(getString(R.string.remove_headset));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        if (isRecording && mMediaRecorder!=null) {
 //            mMediaRecorder.stop();
 //            mMediaRecorder.release();
+//            mMediaRecorder = null;
 //        }
-        //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 start
         if (!isComplete && mMediaPlayer != null) {
             try {
                 mMediaPlayer.stop();
                 mMediaPlayer.release();
+                mMediaPlayer = null;
                 File file = new File(mAudiofilePath);
                 file.delete();
             }catch (Exception e) {
@@ -132,57 +111,125 @@ public class MainMic extends TestActivity {
         //Add for adding second-mic test by lvhongshan 20140521 start
         mAudioManager.setParameters("second-mic=false");
         //Add for adding second-mic test by lvhongshan 20140521 end
+        mRecorder.delete();
+        recoverAudio();
+        if(mReceiver!=null){
+            unregisterReceiver(mReceiver);
+            mReceiver = null;
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mRecorder.delete();
     }
 
-    void record() throws IllegalStateException, IOException, InterruptedException {
 
-        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
-        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
-        mMediaRecorder.setOutputFile(this.getCacheDir().getAbsolutePath() + "/test.aac");
-        mAudiofilePath = this.getCacheDir().getAbsolutePath() + "/test.aac";
-        mMediaRecorder.prepare();
-        mMediaRecorder.start();
+    private void init(){
+        mRemainingTimeCalculator = new RemainingTimeCalculator(this);
+        mRecorder = new Recorder();
     }
+
+    private void startRecord(String mStoragePath){
+        mRemainingTimeCalculator.reset();
+        mRemainingTimeCalculator.setStoragePath(0);
+        mRecorder.setStoragePath(mStoragePath);
+
+        mRemainingTimeCalculator.setBitRate(BITRATE_AMR);
+        mRecorder.setChannels(1);
+        mRecorder.setSamplingRate(SAMPLERATE_8000);
+        mRecorder.startRecording(MediaRecorder.OutputFormat.RAW_AMR, ".amr", this,
+                mAudioSourceType, MediaRecorder.AudioEncoder.AMR_NB);
+    }
+    private void stopRecord(){
+        mRecorder.stop();
+    }
+    private void play(){
+        mRecorder.startPlayback();
+    }
+    @Override
+    public void finish() {
+        isExit = true;
+        super.finish();
+//        if (isRecording && mMediaRecorder!=null) {
+//            mMediaRecorder.stop();
+//            mMediaRecorder.release();
+//            mMediaRecorder = null;
+//        }
+        if (!isComplete && mMediaPlayer != null) {
+            try {
+                mMediaPlayer.stop();
+                mMediaPlayer.release();
+                mMediaPlayer = null;
+                File file = new File(mAudiofilePath);
+                file.delete();
+            }catch (Exception e) {
+                loge(e);
+            }
+        }
+        //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 end
+        //add for click fail button crash when recoding by song 20140506 end
+        mAudioManager.setMode(AudioManager.MODE_NORMAL);
+        //Add for adding second-mic test by lvhongshan 20140521 start
+        mAudioManager.setParameters("second-mic=false");
+        //Add for adding second-mic test by lvhongshan 20140521 end
+        mRecorder.delete();
+        recoverAudio();
+        if(mReceiver!=null){
+            unregisterReceiver(mReceiver);
+            mReceiver = null;
+        }
+    }
+
+//    void record() throws IllegalStateException, IOException, InterruptedException {
+//
+//        mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);
+//        mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+//        mMediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+//        mMediaRecorder.setOutputFile(this.getCacheDir().getAbsolutePath() + "/test.aac");
+//        mAudiofilePath = this.getCacheDir().getAbsolutePath() + "/test.aac";
+//        mMediaRecorder.prepare();
+//        mMediaRecorder.start();
+//    }
 
     void replay() throws IllegalArgumentException, IllegalStateException, IOException {
         final TextView mTextView = (TextView) findViewById(R.id.transmitter_receiver_hint);
         mTextView.setText(getString(R.string.transmitter_receiver_playing));
         // Replaying sound right now by record();
-        stopButton.setClickable(false);
+        stopButton.setEnabled(false);
         //add for pass button enalbed by songguangyu 20140505 start
         btnPass.setEnabled(true);
         //add for pass button enalbed by songguangyu 20140505 end
-//        File file = new File(mAudiofilePath);
-//        FileInputStream mFileInputStream = new FileInputStream(file);
+        File file = new File(mAudiofilePath);
+        FileInputStream mFileInputStream = new FileInputStream(file);
 
-//        mMediaPlayer.reset();
-//        mMediaPlayer.setDataSource(mFileInputStream.getFD());
-//        mMediaPlayer.prepare();
-//        mMediaPlayer.start();
-//
-//        mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
-//
-//            public void onCompletion(MediaPlayer mPlayer) {
-//                //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 start
-//	        isComplete = true;
-//                //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 end
-//                mPlayer.stop();
-//                mPlayer.release();
-//                File file = new File(mAudiofilePath);
-//                file.delete();
-//
-//                final TextView mTextView = (TextView) findViewById(R.id.transmitter_receiver_hint);
-//                mTextView.setText(getString(R.string.transmitter_receiver_replay_end));
-//               // showConfirmDialog();
-//                if (!isExit) {
-//                //       showWarningDialog(getString(R.string.record_finish));
-//		}
-//                //modify for pass button enalbed by songguangyu 20140505 start
-//                //btnPass.setEnabled(true);
-//                //modify for pass button enalbed by songguangyu 20140505 end
-//            }
-//        });
+        mMediaPlayer.reset();
+        mMediaPlayer.setDataSource(mFileInputStream.getFD());
+        mMediaPlayer.prepare();
+        mMediaPlayer.start();
+
+        mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+
+            public void onCompletion(MediaPlayer mPlayer) {
+                //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 start
+                isComplete = true;
+                //Modify for stop the playing when exit test before compeletion by xiasiping 20140625 end
+                mPlayer.stop();
+                mPlayer.release();
+                File file = new File(mAudiofilePath);
+                file.delete();
+                recordButton.setClickable(true);
+                final TextView mTextView = (TextView) findViewById(R.id.transmitter_receiver_hint);
+                mTextView.setText(getString(R.string.transmitter_receiver_replay_end));
+                // showConfirmDialog();
+                if (!isExit) {
+                    //       showWarningDialog(getString(R.string.record_finish));
+                }
+                //modify for pass button enalbed by songguangyu 20140505 start
+                //btnPass.setEnabled(true);
+                //modify for pass button enalbed by songguangyu 20140505 end
+            }
+        });
 
     }
 
@@ -202,19 +249,19 @@ public class MainMic extends TestActivity {
 
         new AlertDialog.Builder(mContext)
                 .setTitle(getString(R.string.transmitter_receiver_confirm)).setPositiveButton(
-                        getString(R.string.yes), new DialogInterface.OnClickListener() {
+                getString(R.string.yes), new DialogInterface.OnClickListener() {
 
-                            public void onClick(DialogInterface dialog, int which) {
-                            //    pass();
-                            }
-                        }).setNegativeButton(getString(R.string.no),
-                        new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //    pass();
+                    }
+                }).setNegativeButton(getString(R.string.no),
+                new DialogInterface.OnClickListener() {
 
-                            public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which) {
 
-                             //   fail(null);
-                            }
-                        }).show();
+                        //   fail(null);
+                    }
+                }).show();
     }
 
     public void setAudio() {
@@ -240,6 +287,26 @@ public class MainMic extends TestActivity {
         //Add for adding second-mic test by lvhongshan 20140521 end
     }
 
+    public void getVolumeBefore() {
+        alarmVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+        musicVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        callVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL);
+        dtmfVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_DTMF);
+        notificationVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+        ringVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_RING);
+        systemVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_SYSTEM);
+    }
+
+    public void recoverAudio() {
+        mAudioManager.setStreamVolume(AudioManager.STREAM_ALARM,alarmVolume,0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,musicVolume,0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL,callVolume,0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_DTMF,dtmfVolume,0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION,notificationVolume,0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_RING,ringVolume,0);
+        mAudioManager.setStreamVolume(AudioManager.STREAM_SYSTEM,systemVolume,0);
+    }
+
     void bindView() {
 
         recordButton = (Button) findViewById(R.id.transmitter_receiver_start);
@@ -250,11 +317,11 @@ public class MainMic extends TestActivity {
         recordButton.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
-
                 if (!mAudioManager.isWiredHeadsetOn()) {
 
                     mTextView.setText(getString(R.string.transmitter_receiver_recording));
                     try {
+                        setAudio();
                         recordButton.setClickable(false);
                         startRecord(Environment.getExternalStorageDirectory().toString()+"/smt_detection");
                         stopButton.setEnabled(true);
@@ -272,13 +339,11 @@ public class MainMic extends TestActivity {
         stopButton.setOnClickListener(new OnClickListener() {
 
             public void onClick(View v) {
-
+                mMediaPlayer = new MediaPlayer();
                 if (isRecording) {
                     //add for click fail button crash when recoding by song 20140506 start
                     isRecording = false;
                     //add for click fail button crash when recoding by song 20140506 end
-//                    mMediaRecorder.stop();
-//                    mMediaRecorder.release();
                     stopRecord();
                     play();
                     try {
@@ -364,4 +429,13 @@ public class MainMic extends TestActivity {
 		am.setParameters("loopback=receiver");
 		super.onResume();
 	}*/
+
+    public class HomeKeyBroadCastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // 在这里处理HomeKey事件
+            recoverAudio();
+        }
+    }
 }
